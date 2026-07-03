@@ -1,0 +1,2 @@
+# NovelMaster
+Novel Hareness
