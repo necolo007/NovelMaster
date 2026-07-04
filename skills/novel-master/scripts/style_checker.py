@@ -94,6 +94,101 @@ def stiff_summary_hits(text: str) -> list[str]:
     return [pattern for pattern in patterns if text.count(pattern) >= 3]
 
 
+def naturalness_warnings(text: str) -> list[str]:
+    warnings: list[str] = []
+    ps = paragraphs(text)
+    if not ps:
+        return warnings
+
+    fragment_paragraphs = [
+        p
+        for p in ps
+        if count_text_chars(p) <= 8 and not re.search(r"[「」“”『』]", p)
+    ]
+    if len(fragment_paragraphs) >= 8 and len(fragment_paragraphs) / len(ps) > 0.08:
+        warnings.append(
+            f"fragment-heavy narration ({len(fragment_paragraphs)} very short non-dialogue paragraphs)"
+        )
+
+    ai_cadence_patterns = [
+        r"不(?:是|像)[^。！？\n]{1,30}[。！？]\s*(?:\n\s*){0,2}(?:是|而是|可|却|但)[^。！？\n]{1,45}[。！？]",
+        r"(?:不是[^。！？\n]{1,30}[。！？]\s*){2,}",
+        r"(?:像[^。！？\n]{1,30}[。！？]\s*){3,}",
+    ]
+    cadence_hits = sum(len(re.findall(pattern, text)) for pattern in ai_cadence_patterns)
+    if cadence_hits >= 3:
+        warnings.append(f"repeated AI-literary cadence ({cadence_hits} pattern hits)")
+
+    non_dialogue = re.sub(r"[「“『].*?[」”』]", "", text, flags=re.S)
+    metaphor_hits = len(re.findall(r"(?:像|仿佛|好似|犹如)", non_dialogue))
+    per_1k = metaphor_hits / max(count_text_chars(non_dialogue), 1) * 1000
+    if metaphor_hits >= 12 and per_1k > 4.5:
+        warnings.append(f"high metaphor density ({metaphor_hits} comparison markers; {per_1k:.1f}/1k chars)")
+
+    recap_patterns = [
+        "这句话",
+        "那句话",
+        "这件事",
+        "这种感觉",
+        "那种感觉",
+        "这不是",
+        "那不是",
+    ]
+    recap_hits = sum(non_dialogue.count(pattern) for pattern in recap_patterns)
+    if recap_hits >= 10:
+        warnings.append(f"possible decorative emotional recap ({recap_hits} abstract recap markers)")
+
+    return warnings
+
+
+def dialogue_quality_warnings(text: str) -> list[str]:
+    warnings: list[str] = []
+    qs = [
+        m.group(1).strip()
+        for m in re.finditer(r"[「“『]([^」”』\n]{1,80})[」”』]", text)
+    ]
+    if not qs:
+        return warnings
+
+    empty_replies = {
+        "嗯",
+        "好",
+        "是",
+        "不是",
+        "没有",
+        "知道",
+        "明白",
+        "来",
+        "不懂",
+        "不用",
+        "没事",
+    }
+    short_empty = [q for q in qs if q in empty_replies or count_text_chars(q) <= 2]
+    if len(short_empty) >= 6 and len(short_empty) / len(qs) > 0.22:
+        warnings.append(
+            f"too many empty/one-word dialogue replies ({len(short_empty)}/{len(qs)})"
+        )
+
+    ps = paragraphs(text)
+    max_dialogue_run = 0
+    run = 0
+    for p in ps:
+        is_dialogue_only = bool(re.fullmatch(r"[「“『].{1,120}[」”』][。！？!?…—]*", p, re.S))
+        if is_dialogue_only:
+            run += 1
+            max_dialogue_run = max(max_dialogue_run, run)
+        else:
+            run = 0
+    if max_dialogue_run >= 6:
+        warnings.append(f"floating dialogue run ({max_dialogue_run} dialogue-only paragraphs in a row)")
+
+    question_answer_pairs = len(re.findall(r"[？?][」”』]?\s*\n\s*[「“『][^」”』]{1,12}[」”』]", text))
+    if question_answer_pairs >= 5:
+        warnings.append(f"repetitive question-answer dialogue ({question_answer_pairs} short replies after questions)")
+
+    return warnings
+
+
 def has_sensory_or_action_signal(text: str) -> bool:
     return bool(
         re.search(
@@ -149,6 +244,12 @@ def cmd_check(project_path_str: str) -> dict:
         hits = stiff_summary_hits(body)
         if hits:
             warnings.append(f"{chapter.name}: repeated stiff-summary phrases: {', '.join(hits[:5])}")
+
+        for warning in naturalness_warnings(body):
+            warnings.append(f"{chapter.name}: {warning}")
+
+        for warning in dialogue_quality_warnings(body):
+            warnings.append(f"{chapter.name}: {warning}")
 
         if not has_reader_hook(body):
             warnings.append(f"{chapter.name}: opening may lack a concrete reader hook")

@@ -84,6 +84,9 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 | **Empty intensifiers** | Filler words that don't add meaning | "非常", "十分", "极其" used as crutches |
 | **Floating dialogue** | Extended dialogue exchanges with no attribution, action, or setting | 10+ lines of pure dialogue with no beats |
 | **Redundant inner monologue** | Protagonist narrates what the reader already saw happen | "刚才那一剑，他用的是家传剑法的第三式——" (reader just read the fight) |
+| **Ornamental metaphor chain** | Multiple abstract metaphors explain the same feeling without new action or decision | "那句话像针，又像旧伤，又像火星…" after the scene already shows pressure |
+| **AI-literary cadence** | Repeated paragraph shapes used to sound profound rather than natural | "它不像X。X会Y。可它像Z。" / "不是A。是B。" repeated as decoration |
+| **Empty fragment stacking** | Several single-sentence or single-word paragraphs that do not create rhythm, tension, or emphasis | "很轻。很冷。很疼。不是疼。" |
 
 ---
 
@@ -94,6 +97,8 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 | **Stiff summary voice** | Important emotional or action moments are summarized at a distance instead of dramatized | "他们交谈许久，终于互相信任" with no lived exchange |
 | **Reader-hook vacuum** | Scene has plot facts but no question, pressure, desire, threat, intimacy shift, or next-click reason | Chapter ends after logistics with no new promise |
 | **Reference copying** | Borrowing ingredient plot, character design, scene order, or recognizable prose instead of craft signals | Same setup/twist/line shape as a reference novel |
+| **Decorative emotional recap** | A paragraph restates what the previous action/dialogue already proved | After a character is publicly humiliated, adding a long explanation that humiliation hurts |
+| **Generic dialogue voice** | Lines can be swapped between characters with no loss of identity | Every character answers in the same clipped "嗯/知道/好/不是" rhythm |
 
 ---
 
@@ -140,6 +145,19 @@ Ingredient-derived style guides may influence rhythm, density, dialogue craft, s
 - Sentence length (terse/elaborate)
 - Verbal tics (catchphrases, filler words, silence patterns)
 - What they DON'T say (taboo topics, avoidance patterns)
+
+**Dialogue audit requirements**:
+- Every exchange must have a purpose: power shift, intent reveal, pressure, intimacy, humor, or useful plot movement.
+- Avoid long runs of question-answer-confirmation. Interrupt with motive, action, evasion, or a line that could only belong to that character.
+- One-word replies are allowed only when the silence is the point. Otherwise replace them with a characterful line or an action beat.
+- If a line can be spoken by another character without changing wording, rewrite it using that character's diction, status, and current desire.
+
+**Prose naturalness requirements**:
+- Keep only one strong image per emotional beat.
+- Cut paragraphs that merely explain a metaphor or repeat an already clear feeling.
+- Prefer concrete verbs and scene movement over abstract commentary.
+- Do not use repeated "不是/是", "不像/像", "可/却" sentence ladders as a default literary effect.
+- A polished paragraph should sound like a confident storyteller, not a caption explaining why the moment matters.
 
 ### 3.3 Pleasure-Point Engineering (爽点工程)
 

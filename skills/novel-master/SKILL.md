@@ -354,8 +354,8 @@ FOR each chapter (from chapter_breakdown.md in order):
   4. Draft pass: generate complete chapter prose
   5. Reader-view pass: simulate 2-3 target readers and note where curiosity, empathy, desire, humor, tension, or emotional warmth feels weak
   6. Style-assimilation pass: revise using ingredient_style_guide craft targets (rhythm, dialogue, sensory/action detail, chapter hook) without copying any source wording
-  7. Final polish pass: remove stiff/formal summary narration, add human gestures and subtext, tighten paragraphs for mobile reading, then save final prose to drafts/chapter_NNN.md
-  8. Self-review (word count tolerance, pleasure point, POV, reader warmth, safe ingredient usage)
+  7. Final polish pass: remove stiff/formal summary narration, cut decorative filler, make dialogue character-specific, tighten paragraphs for mobile reading, then save final prose to drafts/chapter_NNN.md
+  8. Self-review (word count tolerance, pleasure point, POV, reader warmth, prose naturalness, dialogue voice, safe ingredient usage)
   9. Update context_summary.md, plot_tracker.json, and character_state.json
   10. Output chapter summary (word count, key events, reader-view fixes, style-guide craft moves, foreshadowing operations)
 NEXT

@@ -129,7 +129,7 @@ FOR chapter N:
   C. Draft complete prose
   D. Reader-view pass: simulate 2-3 target readers and list weak curiosity/empathy/tension/warmth spots
   E. Style-assimilation pass: revise with local ingredient craft targets, never source wording
-  F. Final polish pass: remove stiff summary, add gestures/subtext, tighten mobile paragraphs, strengthen hook
+  F. Final polish pass: remove stiff summary, cut ornamental filler, make dialogue character-specific, tighten mobile paragraphs, strengthen hook
   G. Save final prose, then self-review and update trackers
 ```
 
@@ -160,6 +160,9 @@ FOR chapter N:
     □ ≥1 pleasure point present
     □ No POV violation (no omniscient slips, no head-hopping)
     □ Dialogue ratio approximately on target
+    □ Dialogue voice is character-specific; no generic, broken, or empty back-and-forth
+    □ No ornamental filler paragraphs that only restate a feeling already shown
+    □ No repeated rhetorical cadence such as "不是X。是Y。" / "它不像X。X..." used as decoration
     □ Ending has hook/cliffhanger
     □ No contradiction with spec_lock constraints
 
@@ -220,6 +223,21 @@ Avoid:
 - summary paragraphs that skip the moment readers wanted to feel
 - abstract labels like "he was angry" without bodily or behavioral evidence
 - perfect speeches where a flawed, personal line would be more memorable
+- decorative psychological explanation after the action already made the point
+- repeated abstract metaphors that do not add new plot, pressure, humor, intimacy, or character choice
+- fragment-heavy narration that feels like an AI trying to sound literary instead of a person telling a story
+- one-question/one-word dialogue chains unless the silence itself changes power, trust, or threat
+
+### 3.0.1 Naturalness & Dialogue Audit
+
+Before saving a chapter, perform a sentence-level cleanup pass:
+
+1. **Cut or merge filler**: if a paragraph only explains a sentence before it, delete it or fold the useful phrase into nearby action.
+2. **One image per beat**: use one concrete image for a feeling, then move on. Do not stack needle/knife/fire/bone-style metaphors for the same emotion.
+3. **Prefer cause over ornament**: a sentence should advance action, reveal character, sharpen tension, land humor, or plant/pay off information. If it only sounds "literary", cut it.
+4. **Smooth broken cadence**: short paragraphs are allowed, but several single-line abstractions in a row must be merged or replaced with action/dialogue.
+5. **Voice-check dialogue**: every named character's lines must match their profile.宇文渊 speaks measured and dry, 铁无双 direct and loud, 老墨 sardonic, 老酒鬼 drunk-mouthed but sharp, 冷月婵 terse and cold. If names can be swapped without changing the line, rewrite it.
+6. **Dialogue must do work**: each exchange should change status, reveal intent, create pressure, or land personality. Remove filler confirmations like repeated "嗯", "知道", "好" unless they carry subtext.
 
 ### 3.1 Chapter Structure (网文通用结构)
 
