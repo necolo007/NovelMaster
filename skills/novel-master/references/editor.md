@@ -81,6 +81,8 @@ Script: `style_checker.py`
 | **Exposition dump** | 500+ characters of pure world-building narration without dialogue or action | warning |
 | **Repetitive phrasing** | Same descriptor used 5+ times in one chapter ("冷笑", "淡淡道") | info |
 | **Cliffhanger check** | Chapter ending without hook (just "and then they went to sleep") | warning |
+| **Reader warmth** | Chapter advances events but lacks curiosity, empathy, sensory presence, social charge, or next-click desire | warning |
+| **Ingredient usage** | `ingredient_style_guide.md` exists but chapter shows no craft influence, or it copies source plot/phrasing instead of style signals | warning/error |
 
 ### 2.5 Pacing Audit (节奏检查)
 

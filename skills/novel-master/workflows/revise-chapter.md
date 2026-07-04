@@ -36,6 +36,7 @@ read_file <project_path>/framework/spec_lock.md
 read_file <project_path>/framework/chapter_breakdown.md  # target chapter's row
 read_file <project_path>/tracking/context_summary.md     # state before this chapter
 read_file <project_path>/drafts/chapter_NNN.md           # current version
+read_file <project_path>/sources/ingredient_style_guide.md # if present
 ```
 
 Also read the **preceding chapter** (`drafts/chapter_{N-1}.md`) for continuity hook.
@@ -49,6 +50,8 @@ Generate the revised chapter prose following all Writer standards:
 - Same POV, style, and voice constraints
 - Same word count target
 - Updated `pleasure_points` and `foreshadowing_*` frontmatter fields
+- Apply the Writer reader-view loop: diagnose target-reader weak points, revise for curiosity/empathy/tension/warmth, then do a final polish pass
+- If `ingredient_style_guide.md` exists, use it for rhythm/dialogue/sensory/action craft only; do not borrow source plot, characters, or phrasing
 
 Save to `drafts/chapter_NNN.md` (overwrite).
 

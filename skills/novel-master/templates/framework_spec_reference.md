@@ -153,6 +153,23 @@
 | **Register** | {register} |
 | **Tone** | {tone} |
 
+### Reader Experience Targets
+
+| Dimension | Value |
+|-----------|-------|
+| **Target Reader Profiles** | {reader_profiles} |
+| **Emotional Pull** | {curiosity/empathy/tension/warmth/next-click strategy} |
+| **Anti-Stiffness Rules** | {what to avoid: summary voice, overly archaic phrasing, plot-report narration} |
+| **Revision Loop** | Draft pass -> reader-view pass -> style-assimilation pass -> final polish pass |
+
+### Ingredient Style Assimilation Plan
+
+| Dimension | Value |
+|-----------|-------|
+| **Style Guide Path** | `sources/ingredient_style_guide.md` |
+| **Craft Signals To Use** | {rhythm/dialogue/sensory/action/emotion/hook signals} |
+| **Hard Boundary** | Never copy plot points, character designs, scene order, or prose passages |
+
 ### Rhythm Targets
 
 | Dimension | Target |

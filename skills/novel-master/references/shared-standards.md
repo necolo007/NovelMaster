@@ -87,7 +87,32 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 
 ---
 
+### 2.3 Reader-Experience Bans
+
+| Banned Pattern | Explanation | Example of Violation |
+|---------------|-------------|---------------------|
+| **Stiff summary voice** | Important emotional or action moments are summarized at a distance instead of dramatized | "他们交谈许久，终于互相信任" with no lived exchange |
+| **Reader-hook vacuum** | Scene has plot facts but no question, pressure, desire, threat, intimacy shift, or next-click reason | Chapter ends after logistics with no new promise |
+| **Reference copying** | Borrowing ingredient plot, character design, scene order, or recognizable prose instead of craft signals | Same setup/twist/line shape as a reference novel |
+
+---
+
 ## 3. Chinese Web Novel Craft Standards (网文写作工艺标准)
+
+### 3.0 Reader-View Revision Standard
+
+Before a chapter is finalized, revise it from the reader's seat:
+
+| Reader Need | Chapter Requirement |
+|-------------|---------------------|
+| Curiosity | The first 1-3 paragraphs create a concrete question, pressure, or promise |
+| Empathy | The POV character has a human-scale want, fear, embarrassment, tenderness, or stubbornness |
+| Presence | Scenes include grounded physical action and at least one non-visual sensory detail |
+| Social charge | Dialogue changes status, trust, affection, rivalry, or hidden information |
+| Payoff | The chapter's pleasure point has setup, turn, and aftershock |
+| Next click | The ending leaves a cost, discovery, decision, threat, or emotional shift unresolved |
+
+Ingredient-derived style guides may influence rhythm, density, dialogue craft, sensory texture, and hook shape. They must not supply plot events, character designs, or quotable phrasing.
 
 ### 3.1 "Show, Don't Tell" Implementation
 

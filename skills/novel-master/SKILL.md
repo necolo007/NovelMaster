@@ -46,6 +46,7 @@ description: >
 |--------|---------|
 | `${SKILL_DIR}/scripts/project_manager.py` | Project init / import-sources / validate |
 | `${SKILL_DIR}/scripts/reference_search.py` | Web search for reference materials (conditional) |
+| `${SKILL_DIR}/scripts/ingredient_analyzer.py` | Local same-genre ingredient style guide generation |
 | `${SKILL_DIR}/scripts/consistency_checker.py` | Cross-chapter consistency audit |
 | `${SKILL_DIR}/scripts/character_checker.py` | Character behavior consistency audit |
 | `${SKILL_DIR}/scripts/plot_checker.py` | Plot logic & foreshadowing audit |
@@ -97,6 +98,8 @@ When the user provides source content, process immediately:
 | Keywords / theme only | This IS material — note them for Architect in Step 4 |
 
 > **Ingredient philosophy**: reference novels in `ingredient/` serve as style exemplars and trope libraries. The Architect and Writer may reference them for genre conventions, but never copy plot or characters. Each `ingredient/` subdirectory should contain a `README.md` noting which aspects are worth studying (prose style, pacing pattern, world-building approach, etc.).
+>
+> **Same-genre style ingestion**: if local reference novels exist under `ingredient/` or `ingredients/`, build a project-level style guide with `ingredient_analyzer.py` after project initialization. The guide extracts craft signals only (rhythm, dialogue ratio, sensory/action/emotion density, reader-polish checklist). It must not quote or reuse reference prose.
 
 **✅ Checkpoint — Confirm inspiration material is ready, proceed to Step 2.**
 
@@ -275,9 +278,33 @@ framework/
 
 ---
 
-### Step 5: Reference Search Phase (Conditional)
+### Step 5: Reference Assimilation & Search Phase
 
 🚧 **GATE**: Step 4 complete; user confirmed framework.
+
+#### 5.1 Local Ingredient Assimilation (Default)
+
+If same-genre reference material exists in `ingredient/` or `ingredients/`, run:
+
+```bash
+python3 ${SKILL_DIR}/scripts/ingredient_analyzer.py <project_path>
+```
+
+When the relevant corpus is in a specific subdirectory, pass it explicitly:
+
+```bash
+python3 ${SKILL_DIR}/scripts/ingredient_analyzer.py <project_path> --ingredient-dir ingredient/<same_genre_dir>
+```
+
+Output:
+
+```
+<project_path>/sources/ingredient_style_guide.md
+```
+
+This guide is mandatory writing context when present. It is a craft summary, not a source of plot, character, or quotable prose.
+
+#### 5.2 External Reference Search (Conditional)
 
 > **Trigger**: Architect marked items in `spec_lock.md` that need external reference material (e.g. specific scene reference images, historical background, scientific validation). Only execute when the framework genuinely needs external references; skip to Step 6 otherwise.
 
@@ -285,7 +312,7 @@ framework/
 python3 ${SKILL_DIR}/scripts/reference_search.py <project_path>
 ```
 
-**✅ Checkpoint — Confirm reference search complete, or skipped if not needed. Proceed to Step 6.**
+**✅ Checkpoint — Confirm local ingredient style guide is generated or intentionally absent; confirm external reference search complete or skipped. Proceed to Step 6.**
 
 ---
 
@@ -303,7 +330,8 @@ Read references/shared-standards.md   # Web novel writing constraints
 
 1. **Design parameter confirmation**: output key writing parameters (style, POV, chapter word count range, pleasure-point strategy) derived from `spec_lock.md`
 2. **Framework speed-read**: batch-read all files under `framework/` to establish global awareness
-3. **Initialize trackers**: create initial state for:
+3. **Ingredient style guide read**: if `<project_path>/sources/ingredient_style_guide.md` exists, read it and extract 3-5 concrete craft targets for the current project (rhythm, dialogue, sensory detail, action beats, emotional warmth)
+4. **Initialize trackers**: create initial state for:
    - `tracking/context_summary.md` — initial context
    - `tracking/plot_tracker.json` — empty foreshadowing registry
    - `tracking/character_state.json` — initial character states
@@ -313,8 +341,27 @@ Read references/shared-standards.md   # Web novel writing constraints
 > ⚠️ **Main-agent only**: Chapter generation MUST stay in the current main agent — chapter continuity depends on full upstream context. Do NOT delegate to sub-agents.
 >
 > ⚠️ **Re-read spec_lock every chapter**: before each chapter, `read_file <project_path>/framework/spec_lock.md` + `read_file <project_path>/tracking/context_summary.md` to prevent context-compression drift.
+>
+> ⚠️ **Re-read ingredient style guide when present**: before each chapter, also read `<project_path>/sources/ingredient_style_guide.md`. Use it for craft moves only; never copy reference plot, characters, or wording.
 
-**Per-chapter flow**:
+**Per-chapter flow (authoritative updated flow)**:
+
+```
+FOR each chapter (from chapter_breakdown.md in order):
+  1. Read spec_lock.md + context_summary.md + ingredient_style_guide.md (if present)
+  2. Look up chapter_breakdown.md entry (core conflict, POV, word target, foreshadowing to plant/resolve)
+  3. Look up character_profiles.md and character_state.json for appearing characters
+  4. Draft pass: generate complete chapter prose
+  5. Reader-view pass: simulate 2-3 target readers and note where curiosity, empathy, desire, humor, tension, or emotional warmth feels weak
+  6. Style-assimilation pass: revise using ingredient_style_guide craft targets (rhythm, dialogue, sensory/action detail, chapter hook) without copying any source wording
+  7. Final polish pass: remove stiff/formal summary narration, add human gestures and subtext, tighten paragraphs for mobile reading, then save final prose to drafts/chapter_NNN.md
+  8. Self-review (word count tolerance, pleasure point, POV, reader warmth, safe ingredient usage)
+  9. Update context_summary.md, plot_tracker.json, and character_state.json
+  10. Output chapter summary (word count, key events, reader-view fixes, style-guide craft moves, foreshadowing operations)
+NEXT
+```
+
+**Legacy short summary (do not use when it conflicts with the authoritative updated flow above)**:
 
 ```
 FOR each chapter (from chapter_breakdown.md in order):

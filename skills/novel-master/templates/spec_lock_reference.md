@@ -20,6 +20,15 @@ style:
   register: "{colloquial|literary|mixed}"
   tone: "{tone_list}"
   dialogue_ratio_target: {float}  # e.g. 0.30 for 30%
+  reader_lens:
+    target_readers: ["{reader_profile_1}", "{reader_profile_2}"]
+    emotional_pull: ["curiosity", "empathy", "tension", "warmth", "next_click"]
+    avoid_voice: ["stiff_summary", "overly_archaic", "plot_report"]
+  revision_loop:
+    draft_pass: true
+    reader_view_pass: true
+    style_assimilation_pass: true
+    final_polish_pass: true
 
   chapter_word_target: {int}
   chapter_word_min: {int}  # target × 0.85
@@ -222,6 +231,12 @@ constraints:
 
 ```yaml
 ingredients:
+  style_guide:
+    path: "sources/ingredient_style_guide.md"
+    status: "{generated|absent|manual}"
+    usage: "Craft influence only: rhythm, dialogue, sensory/action texture, emotional warmth, hook patterns"
+    do_not_copy: ["plot_points", "character_designs", "scene_order", "prose_passages"]
+
   # Reference novels that inform style/tropes (read-only, never copy)
   reference_novels:
     - path: "{relative_path}"

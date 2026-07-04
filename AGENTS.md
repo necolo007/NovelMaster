@@ -47,6 +47,9 @@ python3 skills/novel-master/scripts/project_manager.py validate <project_path>
 # Reference search (conditional)
 python3 skills/novel-master/scripts/reference_search.py <project_path>
 
+# Local ingredient style guide
+python3 skills/novel-master/scripts/ingredient_analyzer.py <project_path> --ingredient-dir ingredient/<same_genre_dir>
+
 # Quality audits
 python3 skills/novel-master/scripts/consistency_checker.py <project_path>
 python3 skills/novel-master/scripts/character_checker.py <project_path>
