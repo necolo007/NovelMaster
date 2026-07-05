@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovelMaster Reader</title>
+    <style>
+        :root {
+            --bg: #f7f5ef;
+            --panel: #fffdf8;
+            --panel-strong: #f0ede4;
+            --text: #24211c;
+            --muted: #746f65;
+            --border: #ddd6c9;
+            --accent: #2f6f73;
+            --accent-strong: #23565a;
+            --reader: #fffaf0;
+            --shadow: rgba(65, 51, 33, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(247, 245, 239, 0.94);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+        }
+
+        .topbar-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 12px 18px;
+            display: grid;
+            grid-template-columns: auto minmax(180px, 360px) 1fr auto;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button,
+        .select,
+        .input {
+            height: 38px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--panel);
+            color: var(--text);
+            font: inherit;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 12px;
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .button.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .select,
+        .input {
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .title-block {
+            min-width: 0;
+        }
+
+        .title-block h1 {
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 1rem;
+            letter-spacing: 0;
+        }
+
+        .title-block p {
+            margin: 2px 0 0;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .layout {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 18px;
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr) 260px;
+            gap: 16px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 10px 26px var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-head {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            background: var(--panel-strong);
+        }
+
+        .panel-title {
+            margin: 0 0 10px;
+            font-size: 0.92rem;
+        }
+
+        .chapter-list {
+            max-height: calc(100vh - 160px);
+            overflow: auto;
+        }
+
+        .chapter-btn {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr);
+            gap: 10px;
+            padding: 11px 12px;
+            border: 0;
+            border-bottom: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            text-align: left;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .chapter-btn:hover,
+        .chapter-btn.active {
+            background: #f5efe2;
+        }
+
+        .chapter-num {
+            color: var(--accent);
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .chapter-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chapter-meta {
+            grid-column: 2;
+            color: var(--muted);
+            font-size: 0.78rem;
+        }
+
+        .reader {
+            min-height: calc(100vh - 130px);
+            background: var(--reader);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 14px 34px var(--shadow);
+            overflow: hidden;
+        }
+
+        .reader-head {
+            padding: 22px 28px 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--panel);
+        }
+
+        .reader-head h2 {
+            margin: 0;
+            font-size: 1.35rem;
+            line-height: 1.35;
+            letter-spacing: 0;
+        }
+
+        .reader-meta {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .reader-body {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 30px 34px 56px;
+            font-family: "Noto Serif CJK SC", "Songti SC", "SimSun", serif;
+            font-size: 1.08rem;
+            line-height: 1.95;
+        }
+
+        .reader-body h1,
+        .reader-body h2,
+        .reader-body h3 {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.35;
+            letter-spacing: 0;
+        }
+
+        .reader-body p {
+            margin: 0 0 0.9em;
+            text-indent: 2em;
+        }
+
+        .reader-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 24px 28px;
+        }
+
+        .side-section {
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .side-section:last-child {
+            border-bottom: 0;
+        }
+
+        .side-section h3 {
+            margin: 0 0 10px;
+            font-size: 0.92rem;
+        }
+
+        .kv {
+            display: grid;
+            grid-template-columns: 88px minmax(0, 1fr);
+            gap: 8px;
+            margin: 7px 0;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .kv strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .exports {
+            display: grid;
+            gap: 8px;
+        }
+
+        .export-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 9px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            text-decoration: none;
+            background: var(--panel);
+            font-size: 0.86rem;
+        }
+
+        .empty {
+            padding: 30px;
+            color: var(--muted);
+        }
+
+        code {
+            color: var(--accent-strong);
+            background: var(--panel-strong);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2px 6px;
+        }
+
+        @media (max-width: 1080px) {
+            .topbar-inner {
+                grid-template-columns: auto minmax(180px, 1fr) auto;
+            }
+
+            .title-block {
+                display: none;
+            }
+
+            .layout {
+                grid-template-columns: 280px minmax(0, 1fr);
+            }
+
+            .meta-panel {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .topbar-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+
+            .chapter-list {
+                max-height: 300px;
+            }
+
+            .reader-head {
+                padding: 18px;
+            }
+
+            .reader-body {
+                padding: 22px 18px 42px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="button" href="index.html">返回项目库</a>
+            <select id="projectSelect" class="select" aria-label="选择项目"></select>
+            <div class="title-block">
+                <h1 id="projectTitle">NovelMaster Reader</h1>
+                <p id="projectMeta">等待项目清单</p>
+            </div>
+            <button id="exportButton" class="button primary" type="button">导出</button>
+        </div>
+    </header>
+
+    <main class="layout">
+        <aside class="panel">
+            <div class="panel-head">
+                <h2 class="panel-title">章节</h2>
+                <input id="chapterSearch" class="input" type="search" placeholder="搜索章节">
+            </div>
+            <div id="chapterList" class="chapter-list"></div>
+        </aside>
+
+        <article class="reader">
+            <div id="readerHead" class="reader-head">
+                <h2>请选择项目</h2>
+                <div class="reader-meta">运行清单脚本后可查看项目内容</div>
+            </div>
+            <div id="readerBody" class="reader-body empty">
+                <p>运行 <code>python skills/novel-master/scripts/build_web_manifest.py</code> 生成清单。</p>
+            </div>
+            <div class="reader-actions">
+                <button id="prevButton" class="button" type="button">上一章</button>
+                <button id="nextButton" class="button" type="button">下一章</button>
+            </div>
+        </article>
+
+        <aside class="panel meta-panel">
+            <section class="side-section">
+                <h3>项目信息</h3>
+                <div id="projectInfo"></div>
+            </section>
+            <section class="side-section">
+                <h3>导出文件</h3>
+                <div id="exports" class="exports"></div>
+            </section>
+            <section class="side-section">
+                <h3>记忆归档</h3>
+                <div id="memoryArchives" class="exports"></div>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        const MANIFEST_URL = 'web/projects.json';
+        let projects = [];
+        let currentProject = null;
+        let currentChapterIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', init);
+        document.getElementById('projectSelect').addEventListener('change', event => openProject(event.target.value));
+        document.getElementById('chapterSearch').addEventListener('input', renderChapterList);
+        document.getElementById('prevButton').addEventListener('click', () => goRelative(-1));
+        document.getElementById('nextButton').addEventListener('click', () => goRelative(1));
+        document.getElementById('exportButton').addEventListener('click', () => {
+            document.querySelector('.meta-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        async function init() {
+            try {
+                const response = await fetch(MANIFEST_URL, { cache: 'no-cache' });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const manifest = await response.json();
+                projects = manifest.projects || [];
+                renderProjectSelect();
+
+                const params = new URLSearchParams(window.location.search);
+                const requested = params.get('project') || projects[0]?.id;
+                if (requested) {
+                    openProject(requested);
+                } else {
+                    renderEmpty();
+                }
+            } catch (error) {
+                console.error(error);
+                renderEmpty();
+            }
+        }
+
+        function renderProjectSelect() {
+            const select = document.getElementById('projectSelect');
+            select.innerHTML = projects.length
+                ? projects.map(project => `<option value="${escapeHtml(project.id)}">${escapeHtml(project.title || project.id)}</option>`).join('')
+                : '<option>无项目</option>';
+        }
+
+        function openProject(projectId) {
+            currentProject = projects.find(project => project.id === projectId) || projects[0] || null;
+            currentChapterIndex = 0;
+
+            if (!currentProject) {
+                renderEmpty();
+                return;
+            }
+
+            document.getElementById('projectSelect').value = currentProject.id;
+            document.getElementById('projectTitle').textContent = currentProject.title || currentProject.id;
+            document.getElementById('projectMeta').textContent = `${currentProject.genreLabel || currentProject.genre || '未分类'} · ${formatNumber(currentProject.stats?.chapters || 0)} 章 · ${formatNumber(currentProject.stats?.words || 0)} 字`;
+            window.history.replaceState({}, '', `viewer.html?project=${encodeURIComponent(currentProject.id)}`);
+
+            renderProjectInfo();
+            renderExports();
+            renderMemoryArchives();
+            renderChapterList();
+            openChapter(0);
+        }
+
+        function renderProjectInfo() {
+            const info = document.getElementById('projectInfo');
+            info.innerHTML = [
+                ['类型', currentProject.genreLabel || currentProject.genre || '未分类'],
+                ['状态', currentProject.pipelineState || 'unknown'],
+                ['章节', formatNumber(currentProject.stats?.chapters || 0)],
+                ['字数', formatNumber(currentProject.stats?.words || 0)],
+                ['记忆', formatNumber(currentProject.stats?.memories || 0)],
+                ['路径', currentProject.path || '']
+            ].map(([key, value]) => `<div class="kv"><strong>${escapeHtml(key)}</strong><span>${escapeHtml(value)}</span></div>`).join('');
+        }
+
+        function renderExports() {
+            const exportsBox = document.getElementById('exports');
+            const files = currentProject.exports || [];
+            if (!files.length) {
+                exportsBox.innerHTML = '<div class="empty">暂无导出文件。</div>';
+                return;
+            }
+            exportsBox.innerHTML = files.map(file => `
+                <a class="export-link" href="${encodeURI(file.path)}" download>
+                    <span>${escapeHtml(file.name)}</span>
+                    <span>${formatFileSize(file.size)}</span>
+                </a>
+            `).join('');
+        }
+
+        function renderMemoryArchives() {
+            const memoryBox = document.getElementById('memoryArchives');
+            const archives = currentProject.memoryArchives || [];
+            if (!archives.length) {
+                memoryBox.innerHTML = '<div class="empty">暂无记忆归档。</div>';
+                return;
+            }
+            memoryBox.innerHTML = archives.map(archive => `
+                <a class="export-link" href="${encodeURI(archive.continuityPath || archive.summariesPath || archive.path)}">
+                    <span>${escapeHtml(archive.name)}</span>
+                    <span>memory</span>
+                </a>
+            `).join('');
+        }
+
+        function renderChapterList() {
+            const list = document.getElementById('chapterList');
+            const query = document.getElementById('chapterSearch').value.trim().toLowerCase();
+            const chapters = currentProject?.chapters || [];
+            const visible = chapters
+                .map((chapter, index) => ({ chapter, index }))
+                .filter(({ chapter }) => {
+                    const haystack = `${chapter.number} ${chapter.title} ${chapter.plainPreview || ''}`.toLowerCase();
+                    return !query || haystack.includes(query);
+                });
+
+            if (!visible.length) {
+                list.innerHTML = '<div class="empty">没有匹配章节。</div>';
+                return;
+            }
+
+            list.innerHTML = visible.map(({ chapter, index }) => `
+                <button class="chapter-btn ${index === currentChapterIndex ? 'active' : ''}" type="button" data-index="${index}">
+                    <span class="chapter-num">${String(chapter.number).padStart(3, '0')}</span>
+                    <span class="chapter-title">${escapeHtml(chapter.title)}</span>
+                    <span class="chapter-meta">${formatNumber(chapter.wordCount || 0)} 字</span>
+                </button>
+            `).join('');
+
+            list.querySelectorAll('.chapter-btn').forEach(button => {
+                button.addEventListener('click', () => openChapter(Number(button.dataset.index)));
+            });
+        }
+
+        async function openChapter(index) {
+            const chapters = currentProject?.chapters || [];
+            if (!chapters.length) {
+                renderReaderHead(null);
+                document.getElementById('readerBody').innerHTML = '<p>此项目还没有章节。</p>';
+                updateNavButtons();
+                return;
+            }
+
+            currentChapterIndex = Math.max(0, Math.min(index, chapters.length - 1));
+            const chapter = chapters[currentChapterIndex];
+            renderChapterList();
+            renderReaderHead(chapter);
+            document.getElementById('readerBody').innerHTML = '<p>加载中...</p>';
+
+            try {
+                const markdown = chapter.contentMarkdown ?? await fetchChapterMarkdown(chapter.path);
+                document.getElementById('readerBody').innerHTML = markdownToHtml(stripFrontmatter(markdown));
+            } catch (error) {
+                console.error(error);
+                document.getElementById('readerBody').innerHTML = `<p>无法读取章节文件：${escapeHtml(chapter.path)}</p>`;
+            }
+
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderReaderHead(chapter) {
+            const head = document.getElementById('readerHead');
+            if (!chapter) {
+                head.innerHTML = '<h2>无章节</h2><div class="reader-meta">当前项目没有可读内容</div>';
+                return;
+            }
+            head.innerHTML = `
+                <h2>Chapter ${String(chapter.number).padStart(3, '0')} ${escapeHtml(chapter.title)}</h2>
+                <div class="reader-meta">
+                    <span>${formatNumber(chapter.wordCount || 0)} 字</span>
+                    <span>${escapeHtml(chapter.path || '')}</span>
+                </div>
+            `;
+        }
+
+        async function fetchChapterMarkdown(path) {
+            const response = await fetch(encodeURI(path), { cache: 'no-cache' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.text();
+        }
+
+        function stripFrontmatter(markdown) {
+            const normalized = markdown.replace(/\r\n/g, '\n');
+            if (!normalized.startsWith('---')) return normalized.trim();
+            const end = normalized.indexOf('\n---', 3);
+            if (end === -1) return normalized.trim();
+            return normalized.slice(end + 4).trim();
+        }
+
+        function markdownToHtml(markdown) {
+            const lines = markdown.split('\n');
+            const blocks = [];
+            let current = [];
+
+            for (const line of lines) {
+                if (!line.trim()) {
+                    flush();
+                    continue;
+                }
+                if (/^#{1,6}\s+/.test(line)) {
+                    flush();
+                    const level = Math.min((line.match(/^#+/) || ['#'])[0].length + 1, 6);
+                    blocks.push(`<h${level}>${escapeHtml(line.replace(/^#{1,6}\s+/, ''))}</h${level}>`);
+                    continue;
+                }
+                current.push(line.trim());
+            }
+            flush();
+
+            function flush() {
+                if (!current.length) return;
+                blocks.push(`<p>${current.map(escapeHtml).join('<br>')}</p>`);
+                current = [];
+            }
+
+            return blocks.join('\n') || '<p>空章节。</p>';
+        }
+
+        function goRelative(delta) {
+            openChapter(currentChapterIndex + delta);
+        }
+
+        function updateNavButtons() {
+            const total = currentProject?.chapters?.length || 0;
+            document.getElementById('prevButton').disabled = currentChapterIndex <= 0;
+            document.getElementById('nextButton').disabled = currentChapterIndex >= total - 1;
+        }
+
+        function renderEmpty() {
+            document.getElementById('projectSelect').innerHTML = '<option>无项目</option>';
+            document.getElementById('chapterList').innerHTML = '';
+            document.getElementById('projectInfo').innerHTML = '<div class="empty">暂无项目。</div>';
+            document.getElementById('exports').innerHTML = '<div class="empty">暂无导出文件。</div>';
+            document.getElementById('memoryArchives').innerHTML = '<div class="empty">暂无记忆归档。</div>';
+            document.getElementById('readerHead').innerHTML = '<h2>请选择项目</h2><div class="reader-meta">等待项目清单</div>';
+            document.getElementById('readerBody').innerHTML = '<p>运行 <code>python skills/novel-master/scripts/build_web_manifest.py</code> 生成清单。</p>';
+        }
+
+        function formatNumber(value) {
+            return new Intl.NumberFormat('zh-CN').format(Number(value || 0));
+        }
+
+        function formatFileSize(bytes) {
+            const value = Number(bytes || 0);
+            if (value < 1024) return `${value} B`;
+            if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`;
+            return `${(value / 1024 / 1024).toFixed(1)} MB`;
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char]));
+        }
+    </script>
+</body>
+
+</html>

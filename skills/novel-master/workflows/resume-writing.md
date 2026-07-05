@@ -58,6 +58,7 @@ Read `novel_config.json` to determine `pipeline_state`:
 2. **Read tracker files** (current state):
    ```
    read_file <project_path>/tracking/context_summary.md
+   read_file <project_path>/tracking/latest_memory.md   # if present
    read_file <project_path>/tracking/plot_tracker.json
    read_file <project_path>/tracking/character_state.json
    ```
@@ -97,4 +98,4 @@ Proceed with the appropriate SKILL.md step:
 | `editing` | Editor Step 7 |
 | `exporting` | Post-processing Step 8 |
 
-> ⚠️ **Full Writer discipline applies**: re-read `spec_lock.md` + `context_summary.md` before EVERY chapter, even when resuming. Follow all SKILL.md Step 6 rules exactly.
+> ⚠️ **Full Writer discipline applies**: re-read `spec_lock.md` + `context_summary.md` + `latest_memory.md` (if present) before EVERY chapter, even when resuming. Follow all SKILL.md Step 6 rules exactly.

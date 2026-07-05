@@ -1,117 +1,69 @@
 #!/usr/bin/env python3
-"""Export novel to plain text format (web novel platform submission).
+"""Export a NovelMaster project to a single TXT file.
 
 Usage:
-    python3 scripts/export_txt.py <project_path> [--volume-split] [--encoding utf-8]
+    python skills/novel-master/scripts/export_txt.py <project_path> [--encoding utf-8]
 
-Features:
-  - UTF-8 with BOM (platform standard for Chinese web novels)
-  - Chinese typography: full-width punctuation, paragraph spacing
-  - Optional volume splitting for very long novels
-  - Strips YAML frontmatter, outputs pure prose
-  - Chapter titles as separators
-
-Outputs to export/<novel_name>.txt
+Outputs:
+    <project_path>/export/<project_name>.txt
 """
 
 from __future__ import annotations
 
-import json
+import argparse
 import sys
-from pathlib import Path
 
-TOOLS_DIR = Path(__file__).resolve().parent
-SKILL_DIR = TOOLS_DIR.parent
-REPO_ROOT = SKILL_DIR.parent.parent
+from novel_utils import ensure_export_dir, load_chapters, load_config, project_slug, project_title, resolve_project
 
 
-def cmd_export(project_path_str: str,
-               volume_split: bool = False,
-               encoding: str = "utf-8") -> None:
-    """Export all chapters to a single TXT file."""
-    project_path = Path(project_path_str).resolve()
-    config_path = project_path / "novel_config.json"
-    drafts_dir = project_path / "drafts"
-    export_dir = project_path / "export"
-
-    if not config_path.exists():
-        print("[ERROR] novel_config.json not found")
-        sys.exit(1)
-
-    config = json.loads(config_path.read_text(encoding="utf-8"))
-    novel_title = config.get("title", project_path.name)
-    project_slug = config.get("project_name", "novel")
-
-    export_dir.mkdir(parents=True, exist_ok=True)
-    chapters = sorted(drafts_dir.glob("chapter_*.md"))
+def cmd_export(project_path_str: str, encoding: str = "utf-8") -> None:
+    project_path = resolve_project(project_path_str)
+    config = load_config(project_path)
+    chapters = load_chapters(project_path)
 
     if not chapters:
         print("[WARN] No chapter drafts found")
         return
 
-    # Build output
-    lines = []
-    # Add BOM for UTF-8 platform compatibility
-    bom = "\ufeff" if encoding == "utf-8" else ""
-
-    lines.append(f"{novel_title}")
+    lines: list[str] = [
+        project_title(config, project_path),
+    ]
     if config.get("author"):
-        lines.append(f"作者：{config['author']}")
-    lines.append("")
-    lines.append("=" * 40)
-    lines.append("")
+        lines.append(f"Author: {config['author']}")
+    lines.extend(["", "=" * 40, ""])
 
-    for ch in chapters:
-        text = ch.read_text(encoding="utf-8")
-
-        # Extract title and body (skip YAML frontmatter)
-        parts = text.split("---")
-        if len(parts) >= 3:
-            body = "---".join(parts[2:]).strip()
-        else:
-            body = text.strip()
-
-        # Extract chapter title line (first # heading)
-        title_line = ""
-        body_lines = body.split("\n")
-        if body_lines and body_lines[0].startswith("# "):
-            title_line = body_lines[0]
-            body = "\n".join(body_lines[1:]).strip()
-
-        lines.append(title_line or f"第{ch.stem.replace('chapter_', '')}章")
+    for chapter in chapters:
+        lines.append(f"Chapter {chapter.number:03d} {chapter.title}")
         lines.append("")
-        lines.append(body)
-        lines.append("")
-        lines.append("-" * 20)
-        lines.append("")
+        lines.append(chapter.plain_text)
+        lines.extend(["", "-" * 20, ""])
 
-    output = bom + "\n".join(lines)
+    content = "\n".join(lines).strip() + "\n"
+    if encoding.lower().replace("_", "-") == "utf-8":
+        content = "\ufeff" + content
 
-    output_path = export_dir / f"{project_slug}.txt"
-    output_path.write_text(output, encoding=encoding)
+    export_dir = ensure_export_dir(project_path)
+    output_path = export_dir / f"{project_slug(config, project_path)}.txt"
+    output_path.write_text(content, encoding=encoding)
 
-    # Count approximate characters
-    char_count = len(output) - len(bom)
+    char_count = len(content.lstrip("\ufeff"))
     print(f"[OK] TXT export complete: {output_path}")
     print(f"   Chapters: {len(chapters)}")
     print(f"   Characters: ~{char_count:,}")
-    print(f"   Encoding: {encoding}{' with BOM' if encoding == 'utf-8' else ''}")
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
-        print("Usage: export_txt.py <project_path> [--volume-split] [--encoding utf-8]")
+    parser = argparse.ArgumentParser(description="Export a NovelMaster project to TXT.")
+    parser.add_argument("project_path")
+    parser.add_argument("--encoding", default="utf-8")
+    parser.add_argument("--volume-split", action="store_true", help="Accepted for compatibility; not used yet.")
+    args = parser.parse_args()
+
+    try:
+        cmd_export(args.project_path, encoding=args.encoding)
+    except Exception as exc:
+        print(f"[ERROR] {exc}", file=sys.stderr)
         sys.exit(1)
-
-    project_path = sys.argv[1]
-    volume_split = "--volume-split" in sys.argv
-    encoding = "utf-8"
-    if "--encoding" in sys.argv:
-        idx = sys.argv.index("--encoding")
-        if idx + 1 < len(sys.argv):
-            encoding = sys.argv[idx + 1]
-
-    cmd_export(project_path, volume_split=volume_split, encoding=encoding)
 
 
 if __name__ == "__main__":

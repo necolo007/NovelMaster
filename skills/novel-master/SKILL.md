@@ -54,6 +54,7 @@ description: >
 | `${SKILL_DIR}/scripts/pacing_checker.py` | Chapter pacing & pleasure-point audit |
 | `${SKILL_DIR}/scripts/novel_audit.py` | Full audit orchestrator (runs all 5 checkers) |
 | `${SKILL_DIR}/scripts/chapter_normalizer.py` | Unified chapter numbering |
+| `${SKILL_DIR}/scripts/chapter_memory.py` | Archive every 10/20 chapters into memory folders |
 | `${SKILL_DIR}/scripts/toc_generator.py` | Table of contents generation |
 | `${SKILL_DIR}/scripts/export_txt.py` | Export to plain text (web novel platform) |
 | `${SKILL_DIR}/scripts/export_epub.py` | Export to EPUB e-book |
@@ -138,6 +139,7 @@ projects/<novel_name>/
 ├── sources/                   # Inspiration & reference
 ├── drafts/                    # Writer output
 ├── tracking/                  # Auto-maintained trackers
+├── memory/                    # Chapter batch archives and long-term memory
 ├── notes/                     # Editor notes
 └── export/                    # Final output
 ```
@@ -335,6 +337,7 @@ Read references/shared-standards.md   # Web novel writing constraints
    - `tracking/context_summary.md` — initial context
    - `tracking/plot_tracker.json` — empty foreshadowing registry
    - `tracking/character_state.json` — initial character states
+5. **Long-memory setup**: if `tracking/latest_memory.md` exists, read it before continuing; otherwise create `memory/` on the first archive boundary.
 
 #### Chapter Generation Loop
 
@@ -342,13 +345,15 @@ Read references/shared-standards.md   # Web novel writing constraints
 >
 > ⚠️ **Re-read spec_lock every chapter**: before each chapter, `read_file <project_path>/framework/spec_lock.md` + `read_file <project_path>/tracking/context_summary.md` to prevent context-compression drift.
 >
+> ⚠️ **Read long-memory when present**: before each chapter, also read `<project_path>/tracking/latest_memory.md` if it exists. It is a compact historical layer; newer tracker files override it on conflict.
+>
 > ⚠️ **Re-read ingredient style guide when present**: before each chapter, also read `<project_path>/sources/ingredient_style_guide.md`. Use it for craft moves only; never copy reference plot, characters, or wording.
 
 **Per-chapter flow (authoritative updated flow)**:
 
 ```
 FOR each chapter (from chapter_breakdown.md in order):
-  1. Read spec_lock.md + context_summary.md + ingredient_style_guide.md (if present)
+  1. Read spec_lock.md + context_summary.md + latest_memory.md (if present) + ingredient_style_guide.md (if present)
   2. Look up chapter_breakdown.md entry (core conflict, POV, word target, foreshadowing to plant/resolve)
   3. Look up character_profiles.md and character_state.json for appearing characters
   4. Draft pass: generate complete chapter prose
@@ -357,7 +362,8 @@ FOR each chapter (from chapter_breakdown.md in order):
   7. Final polish pass: remove stiff/formal summary narration, cut decorative filler, make dialogue character-specific, tighten paragraphs for mobile reading, then save final prose to drafts/chapter_NNN.md
   8. Self-review (word count tolerance, pleasure point, POV, reader warmth, prose naturalness, dialogue voice, safe ingredient usage)
   9. Update context_summary.md, plot_tracker.json, and character_state.json
-  10. Output chapter summary (word count, key events, reader-view fixes, style-guide craft moves, foreshadowing operations)
+  10. If chapter number is divisible by memory_archive_interval (default 10), run chapter_memory.py to archive the latest complete batch
+  11. Output chapter summary (word count, key events, reader-view fixes, style-guide craft moves, foreshadowing operations, memory archive status)
 NEXT
 ```
 
@@ -397,14 +403,30 @@ foreshadowing_resolved: ["第15章-前任店主身份暗示"]
 
 **Continuity safeguards**:
 - `context_summary.md` serves as Writer's per-chapter entry document with "immediately preceding" narrative hook
+- `tracking/latest_memory.md` serves as long-range memory after each archive batch; read it before writing later chapters
+- `memory/chapters_001_010/` style folders preserve searchable batch archives without moving source drafts
 - Character state tracking ensures consistent behavior
 - Foreshadowing tracker ensures every planted thread is eventually resolved
+
+**Long-memory archive cadence**:
+
+```bash
+# Default: archive complete 10-chapter batches
+python3 ${SKILL_DIR}/scripts/chapter_memory.py <project_path>
+
+# Larger projects may prefer 20-chapter batches
+python3 ${SKILL_DIR}/scripts/chapter_memory.py <project_path> --span 20
+```
+
+Use `novel_config.json` field `memory_archive_interval` to set the project default. Archives are additive and non-destructive: `drafts/` remains the source of truth.
 
 **✅ Writer Phase Complete**:
 ```markdown
 ## ✅ Writer Phase Complete
 - [x] All chapters generated (N chapters total, M words total)
 - [x] context_summary.md continuously updated through final chapter
+- [x] memory/ archives generated for each completed archive batch
+- [x] tracking/latest_memory.md points to the latest completed archive memory
 - [x] plot_tracker.json: all foreshadowing status = 'resolved' or marked 'abandoned' (with reason)
 - [x] character_state.json: complete character arc tracking
 ```
