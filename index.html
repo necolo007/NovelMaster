@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovelMaster</title>
+    <meta name="description" content="NovelMaster local project library">
+    <style>
+        :root {
+            --bg: #f7f5ef;
+            --panel: #fffdf8;
+            --panel-strong: #f0ede4;
+            --text: #24211c;
+            --muted: #746f65;
+            --border: #ddd6c9;
+            --accent: #2f6f73;
+            --accent-strong: #23565a;
+            --ink: #543f2e;
+            --ok: #4f7f52;
+            --warn: #9a6a2d;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.5;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(247, 245, 239, 0.92);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+        }
+
+        .topbar-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--panel);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.1rem;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            margin: 2px 0 0;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .button,
+        .input {
+            height: 38px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--panel);
+            color: var(--text);
+            font: inherit;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 12px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .input {
+            width: min(320px, 42vw);
+            padding: 0 12px;
+        }
+
+        .main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 20px 56px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .stat-value {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .stat-label {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 26px 0 12px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .count {
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            min-height: 220px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: inherit;
+            text-decoration: none;
+            overflow: hidden;
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: #bfb4a3;
+            box-shadow: 0 12px 28px rgba(65, 51, 33, 0.12);
+        }
+
+        .card-main {
+            flex: 1;
+            padding: 18px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .card-title {
+            margin: 0 0 8px;
+            font-size: 1.08rem;
+            line-height: 1.35;
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .preview {
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 18px;
+            border-top: 1px solid var(--border);
+            background: var(--panel-strong);
+            color: var(--muted);
+            font-size: 0.84rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+        }
+
+        .empty {
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            padding: 34px;
+            background: var(--panel);
+            color: var(--muted);
+        }
+
+        code {
+            color: var(--accent-strong);
+            background: var(--panel-strong);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2px 6px;
+        }
+
+        @media (max-width: 720px) {
+            .topbar-inner {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .actions {
+                justify-content: stretch;
+            }
+
+            .input {
+                width: 100%;
+                flex: 1;
+            }
+
+            .button {
+                justify-content: center;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="brand-mark">N</div>
+                <div>
+                    <h1>NovelMaster</h1>
+                    <p class="subtitle">项目内容与导出集合</p>
+                </div>
+            </div>
+            <div class="actions">
+                <input id="searchInput" class="input" type="search" placeholder="搜索项目、类型、状态">
+                <a class="button primary" href="viewer.html">打开阅读器</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="stats" aria-label="项目统计">
+            <div class="stat">
+                <div id="projectCount" class="stat-value">0</div>
+                <div class="stat-label">项目</div>
+            </div>
+            <div class="stat">
+                <div id="chapterCount" class="stat-value">0</div>
+                <div class="stat-label">章节</div>
+            </div>
+            <div class="stat">
+                <div id="wordCount" class="stat-value">0</div>
+                <div class="stat-label">估算字数</div>
+            </div>
+            <div class="stat">
+                <div id="exportCount" class="stat-value">0</div>
+                <div class="stat-label">导出文件</div>
+            </div>
+        </section>
+
+        <div class="section-head">
+            <h2>项目库</h2>
+            <span id="visibleCount" class="count"></span>
+        </div>
+        <section id="projectGrid" class="grid" aria-live="polite"></section>
+        <section id="emptyState" class="empty" hidden>
+            <p>暂无项目清单。运行 <code>python skills/novel-master/scripts/build_web_manifest.py</code> 生成 <code>web/projects.json</code>。</p>
+        </section>
+    </main>
+
+    <script>
+        const MANIFEST_URL = 'web/projects.json';
+        let projects = [];
+
+        document.addEventListener('DOMContentLoaded', init);
+        document.getElementById('searchInput').addEventListener('input', renderProjects);
+
+        async function init() {
+            try {
+                const response = await fetch(MANIFEST_URL, { cache: 'no-cache' });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const manifest = await response.json();
+                projects = manifest.projects || [];
+                updateStats(manifest.stats || {});
+                renderProjects();
+            } catch (error) {
+                console.error(error);
+                showEmpty();
+            }
+        }
+
+        function updateStats(stats) {
+            document.getElementById('projectCount').textContent = formatNumber(stats.projects ?? projects.length);
+            document.getElementById('chapterCount').textContent = formatNumber(stats.chapters ?? sum('chapters'));
+            document.getElementById('wordCount').textContent = formatNumber(stats.words ?? sum('words'));
+            document.getElementById('exportCount').textContent = formatNumber(stats.exports ?? sum('exports'));
+        }
+
+        function sum(key) {
+            return projects.reduce((total, project) => total + Number(project.stats?.[key] || 0), 0);
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('projectGrid');
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const visible = projects.filter(project => {
+                const haystack = [
+                    project.title,
+                    project.id,
+                    project.genreLabel,
+                    project.genre,
+                    project.pipelineState,
+                    project.author
+                ].join(' ').toLowerCase();
+                return !query || haystack.includes(query);
+            });
+
+            document.getElementById('visibleCount').textContent = `${visible.length} / ${projects.length}`;
+            grid.innerHTML = visible.map(projectCard).join('');
+            document.getElementById('emptyState').hidden = projects.length > 0;
+        }
+
+        function projectCard(project) {
+            const firstChapter = project.chapters?.[0];
+            const url = `viewer.html?project=${encodeURIComponent(project.id)}`;
+            return `
+                <a class="card" href="${url}">
+                    <div class="card-main">
+                        <h3 class="card-title">${escapeHtml(project.title || project.id)}</h3>
+                        <div class="meta">
+                            <span class="pill">${escapeHtml(project.genreLabel || project.genre || '未分类')}</span>
+                            <span>${formatNumber(project.stats?.chapters || 0)} 章</span>
+                            <span>${formatNumber(project.stats?.words || 0)} 字</span>
+                            <span>${escapeHtml(project.pipelineState || 'unknown')}</span>
+                        </div>
+                        <p class="preview">${escapeHtml(firstChapter?.plainPreview || '还没有章节预览。')}</p>
+                    </div>
+                    <div class="card-foot">
+                        <span>${escapeHtml(project.path || '')}</span>
+                        <span>${formatNumber(project.stats?.exports || 0)} exports</span>
+                    </div>
+                </a>
+            `;
+        }
+
+        function showEmpty() {
+            projects = [];
+            updateStats({});
+            document.getElementById('projectGrid').innerHTML = '';
+            document.getElementById('visibleCount').textContent = '0 / 0';
+            document.getElementById('emptyState').hidden = false;
+        }
+
+        function formatNumber(value) {
+            return new Intl.NumberFormat('zh-CN').format(Number(value || 0));
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char]));
+        }
+    </script>
+</body>
+
+</html>
