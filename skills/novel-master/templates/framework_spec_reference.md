@@ -79,10 +79,19 @@
 
 ### Key Supporting Cast
 
-| Name | Role | Relationship to MC | Function | Arc |
-|------|------|-------------------|----------|-----|
-| {name} | {role} | {relationship} | {function} | {arc} |
-| ... | ... | ... | ... | ... |
+| Name | Role | Relationship to MC | Independent Desire | Moral Logic | Flaw | Voice Signature | Spotlight Ch | Arc | Thematic Function |
+|------|------|-------------------|-------------------|-------------|------|----------------|-------------|-----|-------------------|
+| {name} | {role} | {relationship} | {independent_desire} | {moral_logic} | {flaw} | {voice} | {ch} | {arc} | {theme} |
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+
+### Group Dynamics (Ensemble Only)
+
+| Dimension | Value |
+|-----------|-------|
+| **Group Identity** | {what binds them} |
+| **Internal Frictions** | {tensions} |
+| **Pair Chemistries** | {pair_1}: {chemistry}, {pair_2}: {chemistry} |
+| **Evolution Arc** | Formation → trust → fracture → reconciliation → transformation |
 
 ### Main Antagonist
 
@@ -126,6 +135,16 @@
 
 > Full table in `chapter_breakdown.md`. This is the Writer's primary per-chapter reference.
 
+### POV Rotation Plan (Multi-POV / Ensemble Only)
+
+| POV Character | Total Chapters | % | Chapter Numbers |
+|---------------|---------------|-----|-----------------|
+| {primary} | {N} | ~{pct}% | {chapter_list} |
+| {secondary_1} | {N} | ~{pct}% | {chapter_list} |
+| ... | ... | ... | ... |
+
+### Chapter Detail
+
 | Ch | Title | Core Conflict | POV | Word Target | Characters | Foreshadowing Plant | Foreshadowing Resolve | Pleasure Point |
 |----|-------|---------------|-----|-------------|------------|---------------------|----------------------|----------------|
 | 1 | {title} | {conflict} | {pov} | {words} | {chars} | {plant} | — | {pleasure_type} |
@@ -142,6 +161,7 @@
 |-----------|-------|
 | **POV** | {pov_type} |
 | **POV Character(s)** | {pov_characters} |
+| **POV Rotation** | (if multi-POV) Primary: {name} ~{pct}%, Secondary: {name} ~{pct}%, ... |
 | **Tense** | {tense} |
 
 ### Prose Style

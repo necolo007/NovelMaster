@@ -3,7 +3,8 @@ name: novel-master
 description: >
   AI-driven web novel generation system. Converts inspiration and ideas into complete
   web novels through multi-role collaboration (Architect → Writer → Editor), with
-  consistency tracking and multi-format export (TXT/EPUB/Markdown). Use when user asks
+  consistency tracking and multi-format export (TXT/EPUB/Markdown). Supports single-POV
+  and multi-POV ensemble cast (群像) narratives. Use when user asks
   to "写小说", "写网文", "generate novel", "create web novel", or mentions "novel-master".
 ---
 
@@ -11,7 +12,7 @@ description: >
 
 > AI-driven web novel generation system. Converts inspiration and ideas into complete novels through multi-role collaboration and exports to TXT/EPUB/Markdown.
 
-**Core Pipeline**: `Inspiration → Create Project → [Genre Template] → Architect Six Confirmations → [Reference Search] → Writer Chapter-by-Chapter → Editor Audit → Post-processing → Export`
+**Core Pipeline**: `Inspiration → Create Project → [Genre Template] → Architect Seven Confirmations → [Reference Search] → Writer Chapter-by-Chapter → Editor Audit → Post-processing → Export`
 
 > [!CAUTION]
 > ## 🚨 Global Execution Discipline (MANDATORY)
@@ -20,7 +21,7 @@ description: >
 >
 > 1. **SERIAL EXECUTION** — Steps MUST be executed in order; the output of each step is the input for the next. Non-BLOCKING adjacent steps may proceed continuously once prerequisites are met, without waiting for the user to say "continue"
 > 2. **BLOCKING = HARD STOP** — Steps marked ⛔ BLOCKING require a full stop; the AI MUST wait for an explicit user response before proceeding and MUST NOT make any decisions on behalf of the user
-> 3. **NO CROSS-PHASE BUNDLING** — Cross-phase bundling is FORBIDDEN. (Note: the Six Confirmations in Step 4 are ⛔ BLOCKING — the AI MUST present recommendations and wait for explicit user confirmation before proceeding. Once the user confirms, all subsequent non-BLOCKING steps — framework output, chapter writing, and post-processing — may proceed automatically without further user confirmation)
+> 3. **NO CROSS-PHASE BUNDLING** — Cross-phase bundling is FORBIDDEN. (Note: the Seven Confirmations in Step 4 are ⛔ BLOCKING — the AI MUST present recommendations and wait for explicit user confirmation before proceeding. Once the user confirms, all subsequent non-BLOCKING steps — framework output, chapter writing, and post-processing — may proceed automatically without further user confirmation)
 > 4. **GATE BEFORE ENTRY** — Each Step has prerequisites (🚧 GATE) listed at the top; these MUST be verified before starting that Step
 > 5. **NO SPECULATIVE EXECUTION** — "Pre-preparing" content for subsequent Steps is FORBIDDEN (e.g., writing chapter drafts during the Architect phase)
 > 6. **NO SUB-AGENT CHAPTER GENERATION** — Writer Step 6 chapter generation is context-dependent and MUST be completed by the current main agent end-to-end. Delegating chapter text generation to sub-agents is FORBIDDEN
@@ -187,9 +188,9 @@ Read references/architect.md
 
 > ⚠️ **Mandatory gate**: before writing any framework file, Architect MUST `read_file templates/framework_spec_reference.md` and follow its complete structure. See `architect.md` Section 1.
 
-#### Six Confirmations (捆绑呈现)
+#### Seven Confirmations (捆绑呈现)
 
-⛔ **BLOCKING**: present the Six Confirmations as a single bundled recommendation set and **wait for explicit user confirmation or modification** before outputting any framework files. This is the single core confirmation point — once confirmed, all subsequent steps proceed automatically.
+⛔ **BLOCKING**: present the Seven Confirmations as a single bundled recommendation set and **wait for explicit user confirmation or modification** before outputting any framework files. This is the single core confirmation point — once confirmed, all subsequent steps proceed automatically.
 
 ##### a. Work Positioning (作品定位)
 
@@ -246,10 +247,21 @@ Read references/architect.md
 
 | Dimension | Recommendation | Notes |
 |-----------|---------------|-------|
-| **Narrative POV** | First person / Third person limited / Third person omniscient | With reasoning |
+| **Narrative POV** | First person / Third person limited / Third person omniscient / Multi-POV rotating | With reasoning |
 | **Prose style** | Plain / Ornate / Humorous / Hot-blooded / Healing / Dark | Combinable |
 | **Dialogue ratio** | Low (20%) / Medium (35%) / High (50%+) | — |
 | **Pleasure-point types** | Power-up / Face-slap / Reward / Reveal / Romance escalation | ≥1 per chapter |
+
+##### g. Ensemble Cast Design (群像设计) — When Applicable
+
+> For multi-POV/ensemble cast novels only. For single-protagonist novels, note "不适用" and skip.
+
+| Dimension | Recommendation | Notes |
+|-----------|---------------|-------|
+| **Ensemble tier** | T1 (轻群像) / T2 (均衡群像) / T3 (全景群像) | T1 recommended for most web novels |
+| **POV rotation plan** | Primary ~60%, Secondary ~20% each, Tertiary ~5% each | Return-to-primary every 3 chapters |
+| **Support character depth** | Each POV support: independent desire + moral logic + flaw + voice signature + spotlight chapter | 8-point checklist (see architect.md §g.2) |
+| **Group dynamics** | Group identity, internal frictions, pair chemistries, evolution arc | — |
 
 ---
 
@@ -269,12 +281,12 @@ framework/
 **✅ Architect Phase Complete**:
 ```markdown
 ## ✅ Architect Phase Complete
-- [x] Six Confirmations user-confirmed
+- [x] Seven Confirmations user-confirmed
 - [x] world_building.md produced
-- [x] character_profiles.md produced (with relationship descriptions)
+- [x] character_profiles.md produced (with relationship descriptions + group dynamics for ensemble)
 - [x] plot_outline.md produced (volumes / arcs / chapters)
-- [x] chapter_breakdown.md produced (per chapter: core conflict + POV + word count + foreshadowing)
-- [x] spec_lock.md generated
+- [x] chapter_breakdown.md produced (per chapter: core conflict + POV + word count + foreshadowing + POV rotation plan for ensemble)
+- [x] spec_lock.md generated (with §ensemble section if applicable)
 - [ ] **Next**: Auto-proceed to [Reference Search / Writer] phase
 ```
 
@@ -446,7 +458,7 @@ Read references/editor.md
 
 | Dimension | Script | Checks |
 |-----------|--------|--------|
-| **Consistency** | `consistency_checker.py` | Name consistency, timeline no contradiction, item ownership no errors |
+| **Consistency** | `consistency_checker.py` | Name consistency, kinship/title/surname logic, timeline no contradiction, item ownership no errors |
 | **Character** | `character_checker.py` | Behavior consistency, power growth no jumps, relationship evolution reasonable |
 | **Plot** | `plot_checker.py` | All foreshadowing resolved, no logic holes, power system no collapse |
 | **Style** | `style_checker.py` | Style matches spec_lock, dialogue ratio meets target, no POV violations |

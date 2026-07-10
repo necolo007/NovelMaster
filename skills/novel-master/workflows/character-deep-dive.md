@@ -1,10 +1,10 @@
 ---
-description: Generate a deep-dive backstory, character study, or standalone side-story arc for a specific character. Run when the user wants to explore a character beyond the main plot.
+description: Generate a deep-dive backstory, character study, or standalone side-story arc for a specific character. Run when the user wants to explore a character beyond the main plot. Supports ensemble cast (群像) integration — deep-dives feed into the main novel's multi-POV narrative.
 ---
 
 # Character Deep-Dive Workflow
 
-> Standalone character exploration. Run when the user wants to generate a character's detailed backstory, psychological profile, or standalone side-story arc. This enriches the main novel's character depth without bloating the main narrative.
+> Standalone character exploration. Run when the user wants to generate a character's detailed backstory, psychological profile, or standalone side-story arc. This enriches the main novel's character depth without bloating the main narrative. For ensemble cast novels, deep-dives on supporting characters directly serve as POV chapter preparation material.
 
 ---
 
@@ -16,6 +16,8 @@ description: Generate a deep-dive backstory, character study, or standalone side
 | "给XX写个外传" | Run this workflow |
 | "XX的背景故事是什么" | Run this workflow |
 | Request for character backstory / side story | Run this workflow |
+| "这个配角还需要丰富一下" | Run this workflow with ensemble integration |
+| Preparing for a support character's POV chapter | Run Option A+B (backstory + psychological) to establish the character's interiority before writing their POV |
 
 ---
 
@@ -153,6 +155,15 @@ Ensure the deep-dive is consistent with:
 
 Save to `notes/character_{name_slug}_{type}.md` in the project directory.
 
+### Ensemble Cast Integration (群像集成)
+
+When the project uses multi-POV ensemble cast, deep-dive output serves double duty:
+
+1. **POV chapter preparation**: Before writing a supporting character's first POV chapter, generate Option A+B for that character. The Writer uses the backstory and psychological profile to construct authentic interiority.
+2. **Voice calibration**: The psychological profile's "Personality Architecture" and "Cognitive Patterns" sections become the voice signature reference for that character's POV narration.
+3. **Independent desire documentation**: The backstory's "Turning Point" section should crystallize the character's independent desire — what THEY want beyond helping the protagonist. This becomes the emotional engine for their POV chapters.
+4. **Update spec_lock.md**: After a deep-dive, update the character's entry in `spec_lock.md §ensemble` with any new voice signature details, independent desire refinements, or arc milestone adjustments discovered during the deep-dive.
+
 ```markdown
 ## ✅ Character Deep-Dive Complete
 
@@ -160,6 +171,10 @@ Save to `notes/character_{name_slug}_{type}.md` in the project directory.
 **Type**: {backstory | psychological | side-story | future | full}
 **Saved to**: notes/character_{slug}_{type}.md
 **Consistency**: Verified against world_building.md and character_profiles.md
+**Ensemble Integration** (if applicable):
+  - Voice signature documented for POV narration
+  - Independent desire crystallized
+  - spec_lock.md §ensemble updated
 
 This material enriches the Writer's understanding of {name} for future chapters.
 ```

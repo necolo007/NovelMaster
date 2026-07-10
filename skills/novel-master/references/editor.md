@@ -35,6 +35,7 @@ Script: `consistency_checker.py`
 | Check | What It Catches | Severity |
 |-------|----------------|----------|
 | **Name consistency** | Same character called different names across chapters (林星河 → 星河 → 小林 → 林兄 without narrative reason) | error |
+| **Kinship/name logic** | Family members' surnames, aliases, titles, ages, or inheritance status contradict the framework without an explicit explanation | error |
 | **Timeline consistency** | Events that should take 1 day spanning 3 chapters where characters reference "weeks" | error |
 | **Item/possession tracking** | Protagonist gains item in Ch.15, uses it in Ch.20, but Ch.18 says "empty-handed" | error |
 | **Location consistency** | Character in City A at end of Ch.10, in City B at start of Ch.11 with no travel | error |
@@ -96,6 +97,25 @@ Script: `pacing_checker.py`
 | **Breathing room** | 10+ consecutive high-tension chapters with no release → reader fatigue | info |
 | **Chapter length variance** | Chapter is <50% or >200% of target word count | warning |
 
+### 2.6 Ensemble Cast Audit (群像检查)
+
+> **Trigger**: Only run when `spec_lock.md §ensemble` exists. For single-POV novels, skip this dimension.
+
+Script: (manual audit — no dedicated script yet; use chapter frontmatter analysis)
+
+| Check | What It Catches | Severity |
+|-------|----------------|----------|
+| **POV rotation compliance** | Primary POV exceeds 70% of chapters, or return rule violated (3+ consecutive non-protagonist POV chapters) | warning |
+| **POV voice differentiation** | Two different POV characters' chapters read with indistinguishable narration style, perception habits, and vocabulary | error |
+| **POV knowledge leak** | A POV character knows or intuits information that was only revealed in another character's POV chapter, with no narrative transmission shown | error |
+| **Supporting character screen time** | Named supporting character vanishes for >15 consecutive chapters without narrative reason | warning |
+| **Cheerleader detection** | Supporting character appears in ≥5 chapters but never drives action, makes an independent choice, or conflicts with the protagonist | warning |
+| **Spotlight chapter quality** | A chapter labeled as a support character's POV but >50% of its content revolves around the protagonist's actions/feelings | error |
+| **Support arc progress** | Supporting character's independent desire shows no progression (same state as 10 chapters ago) or is abandoned without resolution | warning |
+| **Group scene dynamics** | In chapters with 3+ named characters in the same scene, all non-protagonist dialogue is reactive (agreeing, asking questions, gasping) with zero character-specific friction | warning |
+| **Convergence check** | Volume ends without any chapter where all major POV characters' threads intersect | warning |
+| **Independent desire resolution** | Supporting character's independent desire line is introduced but never meaningfully addressed or resolved | error |
+
 ---
 
 ## 3. Audit Workflow
@@ -127,6 +147,9 @@ python3 ${SKILL_DIR}/scripts/style_checker.py <project_path>
 
 # 5. Pacing — depends on all prior checks passing
 python3 ${SKILL_DIR}/scripts/pacing_checker.py <project_path>
+
+# 6. Ensemble (群像) — manual audit, only when spec_lock.md §ensemble exists
+# Analyze drafts/ frontmatter for POV distribution, voice check via sampling, screen time analysis
 ```
 
 Or run the full orchestrator:
@@ -184,6 +207,7 @@ Additional platform-specific checks:
 | Plot | 0 | 0 | 0 | 🟢 |
 | Style | 1 | 3 | 2 | 🔴 |
 | Pacing | 0 | 1 | 1 | 🟡 |
+| Ensemble (群像) | 0 | 2 | 1 | 🟡 |
 
 **Overall**: 🔴 1 error must be fixed before export.
 
@@ -224,6 +248,7 @@ Additional platform-specific checks:
 - [x] plot_checker: 0 errors, N warnings
 - [x] style_checker: 0 errors, N warnings
 - [x] pacing_checker: 0 errors, N warnings
+- [x] ensemble_checker: 0 errors, N warnings (if applicable)
 - [x] Sensitivity check: passed
 - [ ] **Next**: Auto-proceed to Post-processing & Export
 ```

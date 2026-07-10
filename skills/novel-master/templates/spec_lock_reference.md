@@ -13,8 +13,32 @@
 
 ```yaml
 style:
-  pov: "{first_person|third_person_limited|third_person_omniscient}"
-  pov_character: "{character_name}"  # for limited POV
+  pov: "{first_person|third_person_limited|third_person_omniscient|multi_pov_rotating}"
+  pov_character: "{character_name}"  # for limited POV; for multi-POV, list primary
+  pov_characters: ["{primary}", "{secondary_1}", "{secondary_2}"]  # for multi-POV only
+  pov_rotation:  # for multi-POV only
+    primary_pov: "{protagonist_name}"
+    primary_pov_pct: {float}  # e.g. 0.60 for 60%
+    secondary_povs:
+      - name: "{char_name}"
+        pct: {float}
+        chapters: [{int_list}]
+        voice_signature: "{perception_style + vocabulary + internal_concerns}"
+        independent_desire: "{one_sentence}"
+        spotlight_chapters: [{int_list}]
+        arc_milestones:
+          - chapter: {int}
+            milestone: "{description}"
+    tertiary_povs:
+      - name: "{antagonist_name}"
+        pct: {float}
+        chapters: [{int_list}]
+        voice_signature: "{description}"
+    rotation_rules:
+      - "return_to_primary_every_3_chapters"
+      - "no_head_hopping_within_scene"
+      - "convergence_per_volume"
+    convergence_chapters: [{int_list}]  # chapters where all POV threads intersect
   tense: "past"
   prose_style: "{style_descriptor}"
   register: "{colloquial|literary|mixed}"
@@ -109,9 +133,16 @@ characters:
     - name: "{name}"
       role: "{mentor|friend|rival|love_interest|comic_relief}"
       relationship_to_mc: "{description}"
+      independent_desire: "{what they want beyond helping MC}"
+      moral_logic: "{their ethical framework}"
+      flaw: "{recurring mistake with real consequences}"
       personality_keywords: ["{kw1}", "{kw2}"]
+      voice_signature: "{speech rhythm, vocabulary, verbal tics}"
       function: "{narrative_function}"
+      spotlight_chapter: {int}  # chapter where their unique skill/choice changes outcome
       speech_style: "{description}"
+      thematic_function: "{which theme they embody/challenge}"
+      arc: "From {start} → To {end} (belief change, not just power change)"
 
   antagonists:
     - name: "{name}"
@@ -125,6 +156,15 @@ characters:
     - pair: ["{char_a}", "{char_b}"]
       type: "{friends|romance|rivalry|mentor_student|enemies|family}"
       evolution: "From {start} → To {end}"
+
+  # Group dynamics (ensemble only)
+  group_dynamics:
+    identity: "{what binds them together}"
+    internal_frictions: ["{tension_1}", "{tension_2}"]
+    evolution: "Formation → trust building → fracture → reconciliation → transformation"
+    pair_chemistries:
+      - pair: ["{char_a}", "{char_b}"]
+        chemistry: "{mentor_student|rivals_with_respect|old_friends_with_baggage|reluctant_allies|unspoken_attraction}"
 ```
 
 ---
@@ -207,6 +247,7 @@ constraints:
     - "End a chapter without a hook/cliffhanger"
     - "Use omniscient narration phrases like '他不知道的是...'"
     - "Write exposition dumps longer than 3 sentences without breaking into action/dialogue"
+    - "Create family-name contradictions unless the relationship explicitly explains alias, courtesy name, adopted status, maternal surname, or title/respect-name usage"
 
   # Things the Writer must ALWAYS do
   always:
@@ -216,6 +257,7 @@ constraints:
     - "Use dialogue attribution via action beats, not '他说'"
     - "Track character power levels exactly — no unearned jumps"
     - "End every chapter with a hook"
+    - "Audit appearing characters' kinship, aliases, surnames, ages, ranks, titles, and inheritance status against character profiles and trackers before drafting"
 
   # Word count targets
   word_count:

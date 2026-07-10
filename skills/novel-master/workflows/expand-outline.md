@@ -62,6 +62,9 @@ For each chapter in scope, define:
 5. **Character arc alignment**: Chapter events map to character arc milestones from `character_profiles.md`.
 6. **Cliffhanger chain**: Each chapter ending hooks into the next chapter's opening.
 7. **Word count budget**: Sum of chapter word targets should match the volume/arc word target.
+8. **[Ensemble] POV rotation balance**: Primary POV ≤70% of chapters. Each secondary POV ≥3 chapters per volume. Return to primary POV at least every 3 chapters.
+9. **[Ensemble] Support character spotlight**: Each support POV character must have ≥1 chapter where they are the primary problem-solver, their flaw is tested, and their desire line drives the emotional engine.
+10. **[Ensemble] Thread convergence**: Every volume must have ≥1 chapter where all major POV characters' threads intersect (shared scene or visible causal connection).
 
 **Quality checks** (self-audit before output):
 
@@ -72,6 +75,9 @@ For each chapter in scope, define:
 - [ ] Character appearances are tracked (no character vanishes for 20+ chapters without reason)
 - [ ] Pleasure-point mix approximately matches target distribution
 - [ ] Opening chapter is strongest hook (not a "setup" chapter)
+- [ ] **[Ensemble]** POV rotation: primary ≤70%, return-to-primary every ≤3 chapters
+- [ ] **[Ensemble]** Each support POV has ≥1 spotlight chapter identified
+- [ ] **[Ensemble]** ≥1 convergence chapter per volume planned
 
 ---
 

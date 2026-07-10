@@ -29,6 +29,8 @@ Before the first chapter, output key writing parameters derived from `spec_lock.
 | Dialogue ratio target | ≥30% | spec_lock.md §style |
 | Pleasure-point strategy | ≥1 per chapter, mix of power-up/face-slap/reveal | spec_lock.md §pleasure_points |
 | Forbidden patterns | No omniscient narration, no character IQ drops, no power scaling collapse | spec_lock.md §constraints |
+| **[Ensemble]** POV rotation | Primary: 林星河 (~60%), Secondary: 冷月婵 (~20%), 楚红袖 (~15%), Antagonist: 厉天邪 (~5%) | spec_lock.md §ensemble |
+| **[Ensemble]** POV voice map | 林星河=measured+dry, 冷月婵=terse+cold, 楚红袖=sharp+playful, 厉天邪=cold+philosophical | spec_lock.md §ensemble |
 ```
 
 ### 1.2 Framework Speed-Read (Batch)
@@ -72,6 +74,13 @@ Create the initial tracking files:
 
 ## Story So Far
 (Chapter 1 begins — no prior context)
+
+## Per-POV Thread Summary
+| POV Character | Last Chapter | Current Situation | Next Scheduled |
+|---------------|-------------|-------------------|----------------|
+| {protagonist} | — | Starting point | Ch.1 |
+| {support_1} | — | (not yet introduced) | Ch.X |
+| {support_2} | — | (not yet introduced) | Ch.Y |
 
 ## Character States
 | Character | Location | Status | Recent Changes |
@@ -147,9 +156,22 @@ FOR chapter N:
       - Foreshadowing to plant / resolve
       - Characters appearing
 
+  STEP B.5 — POV Voice Switch (ensemble cast only, MANDATORY when POV changes):
+    If current chapter POV differs from previous chapter:
+      a. Re-read the new POV character's full profile in character_profiles.md
+      b. Review their voice signature: speech rhythm, vocabulary range, perception habits, internal concerns
+      c. Review their current state in character_state.json: location, active goals, recent emotional state
+      d. Write the first 3 paragraphs from inside their head — what do THEY notice first?
+      e. Verify: if you replaced the POV character name with the protagonist's, would the narration feel wrong? It SHOULD feel wrong.
+      f. Verify: the POV character's desire (not the protagonist's) drives the scene's emotional engine
+
   STEP C — Read character states:
     Look up appearing characters in character_profiles.md
     Cross-reference with character_state.json for current status
+    Check kinship/name logic for appearing characters:
+      - family relations must have matching surnames unless profiles explicitly define alias, courtesy name, adopted status, maternal surname, or title/respect-name usage
+      - aliases/titles must be introduced in prose before they can hide a surname mismatch
+      - do not invent a new kinship explanation in chapter prose without updating character_profiles.md, spec_lock.md, and character_state.json
 
   STEP D — Generate prose:
     Write chapter N → drafts/chapter_NNN.md
@@ -163,8 +185,12 @@ FOR chapter N:
     □ Dialogue voice is character-specific; no generic, broken, or empty back-and-forth
     □ No ornamental filler paragraphs that only restate a feeling already shown
     □ No repeated rhetorical cadence such as "不是X。是Y。" / "它不像X。X..." used as decoration
+    □ Kinship/name logic holds: relatives' surnames, aliases, titles, ages, ranks, and inheritance status match the framework or are explicitly explained
     □ Ending has hook/cliffhanger
     □ No contradiction with spec_lock constraints
+    □ **[Ensemble]**: If POV changed this chapter, narration voice, perception style, and internal concerns are distinctly different from previous POV
+    □ **[Ensemble]**: Non-POV characters in this chapter are NOT reduced to cheerleaders — each has at least one line/action that reflects their independent desire or perspective
+    □ **[Ensemble]**: Group scenes (3+ characters) have role distribution: who leads, who challenges, who observes — not everyone taking turns agreeing
 
   STEP F — Update trackers (MANDATORY after each chapter):
     Update context_summary.md
@@ -283,6 +309,69 @@ These elements MUST carry forward from previous chapters:
 | **Active wounds/injuries** | Injuries from previous chapters persist realistically |
 | **Active quests/obligations** | Characters don't forget their goals mid-arc |
 | **World rules** | Never violate rules established in `world_building.md` |
+| **Names / kinship / titles** | Family surnames, aliases, courtesy names, titles, adopted status, and maternal surnames must be consistent with `character_profiles.md`, `spec_lock.md`, and `character_state.json` |
+| **[Ensemble] POV knowledge state** | Each POV character only knows what THEY have experienced. When switching POV, do not carry knowledge from a different POV into their narration. Track knowledge per character. |
+| **[Ensemble] Support arc progress** | Each supporting character's independent arc must advance at their scheduled chapters. Reference `spec_lock.md §ensemble` for arc milestones. |
+
+### 3.5 Ensemble Cast Writing Techniques (群像写作技法)
+
+> **Applicability**: This section is MANDATORY when the novel has ensemble cast configuration (spec_lock.md §ensemble exists). For single-POV novels, this section may be skipped.
+
+#### 3.5.1 Multi-POV Voice Differentiation (多视角声音区分)
+
+When writing from a non-protagonist POV, the narration itself must change:
+
+| Element | Protagonist POV | Support POV Example (冷月婵) | Antagonist POV Example (厉天邪) |
+|---------|----------------|---------------------------|-------------------------------|
+| **What they notice** | Opportunities, threats to allies, power dynamics | Body language, micro-expressions, threats to discipline | Weaknesses, contradictions in others' logic, leverage points |
+| **Internal monologue style** | Strategic calculation + emotional reaction | Sparse, disciplined, observation-heavy | Cold analysis + brief flashes of contempt or grudging respect |
+| **Sensory priority** | Balanced (sight > touch > sound) | Sound and spatial awareness dominant | Visual detail + temperature metaphors |
+| **Value judgments** | "Is this fair? Can I trust them?" | "Is this disciplined? Does it follow the code?" | "Is this efficient? Where is the weakness?" |
+| **Memory triggers** | Past failures, mentor advice, promises made | Past betrayals, code violations witnessed, oaths sworn | Past victories analyzed, past defeats that taught lessons |
+
+> **Check**: After writing a non-protagonist POV chapter, swap the POV character name with the protagonist and re-read the narration. If it still "works" — the voice is not distinct enough.
+
+#### 3.5.2 Supporting Character Spotlight Scenes (配角高光时刻)
+
+Every supporting character with a POV must have at least one "spotlight chapter" where:
+
+1. **They are the primary problem-solver**: The protagonist is either absent, incapacitated, or out of their depth. The supporting character's unique skill/perspective is the ONLY thing that can resolve the situation.
+2. **Their flaw is tested**: The situation pressures their specific limitation. They may succeed but at a cost, or fail in a way that forces growth.
+3. **Their desire line is foregrounded**: The chapter's emotional core is THEIR want, not the protagonist's. The reader should feel what's at stake for THEM.
+4. **Their voice dominates**: ≥60% of the chapter's dialogue belongs to or revolves around this character.
+5. **Aftermath ripple**: The chapter's outcome affects the group dynamic in a visible way — trust gained, respect shifted, tension created.
+
+**Spotlight chapter anti-patterns**:
+- Support character solves a problem the protagonist could easily have solved → feels like filler
+- Support character's "spotlight" is actually about how they feel about the protagonist → not a true spotlight
+- Support character succeeds effortlessly → no tension, no growth, no reader investment
+
+#### 3.5.3 Group Scene Choreography (群戏编排)
+
+When 3+ major characters share a scene:
+
+1. **Enter with purpose**: Each character enters the scene with a clear immediate want — not just "to be there."
+2. **Power dynamics visible**: Within the first 3 exchanges, establish who has authority, who has information, who has emotional leverage.
+3. **Rotate the lens**: In a group conversation, the narrative attention should rotate — not stay locked on the protagonist's reactions. Show how character B reacts to what character C just said.
+4. **Sub-group whispers**: In scenes with 4+ characters, allow side conversations, whispered asides, or non-verbal exchanges between non-protagonist characters.
+5. **Exit with change**: When the scene ends, at least 2 characters' relationship status or understanding of the situation should have shifted.
+
+#### 3.5.4 POV Transition Craft (视角切换工艺)
+
+When switching POV between chapters:
+
+| Technique | How to Execute |
+|-----------|---------------|
+| **Time bridge** | New chapter starts at the same moment as previous chapter's cliffhanger, but from the new POV character's location |
+| **Consequence landing** | New chapter opens with the new POV character experiencing the consequence of the previous chapter's climax |
+| **Contrast cold open** | New POV opens in a contrasting situation (peaceful vs. previous chapter's chaos, or vice versa) to create tonal rhythm |
+| **Question hook** | New POV opens with a question that the previous chapter raised but couldn't answer — now seen from the perspective that holds the answer |
+| **Emotional echo** | New POV is processing an emotion that mirrors or inverts the previous chapter's emotional climax |
+
+**POV transition anti-patterns**:
+- "Meanwhile, in another part of the world..." — lazy, breaks immersion
+- New POV chapter opens with exposition about who they are — trust the reader to recognize voice
+- POV switch to show the reader information the protagonist needs — the POV character should have their own reason for the scene
 
 ---
 
@@ -292,6 +381,7 @@ These elements MUST carry forward from previous chapters:
 
 After each chapter, update:
 - **Story So Far**: 3–5 sentence summary of what just happened, flowing naturally from the previous summary
+- **Per-POV Thread Summary** (ensemble only): For each POV character, log their current situation and emotional state. This ensures the Writer can "pick up" a thread correctly when returning to that POV after several chapters.
 - **Character States table**: location, health/status, recent changes for each active character
 - **Active Foreshadowing**: list all unresolved threads with urgency rating
 - **Recent Rhythm**: visual bar chart of last 5 chapters' intensity
@@ -334,7 +424,15 @@ After each chapter, update:
         "苏晴": {"status": "搭档", "closeness": 72, "recent_event": "发现被跟踪后暗中保护"}
       },
       "active_goals": ["救出苏晴", "查明商会密信内容"],
-      "inventory_key_items": ["杂货铺契约", "神秘纹章碎片"]
+      "inventory_key_items": ["杂货铺契约", "神秘纹章碎片"],
+      "arc_milestone": "trust_building_phase",
+      "independent_desire_progress": "开始怀疑商会的真正目的——这与保护苏晴的初衷产生冲突",
+      "last_pov_chapter": 42,
+      "knowledge_state": {
+        "knows_about": ["商会密信", "地下通道", "苏晴的真实身份"],
+        "suspects": ["厉天邪与商会有关联"],
+        "does_not_know": ["冷月婵的过去", "楚红袖的卧底身份"]
+      }
     }
   },
   "last_updated_chapter": 43
@@ -353,6 +451,10 @@ After generating the final chapter, output:
 - [x] context_summary.md continuously updated
 - [x] plot_tracker.json: 0 active foreshadowing threads remaining
 - [x] character_state.json: complete arc tracking
+- [x] **[Ensemble]** POV rotation followed: primary POV ≤70% of chapters
+- [x] **[Ensemble]** Each POV support character had ≥1 spotlight chapter
+- [x] **[Ensemble]** All support character independent arcs reached planned milestones
+- [x] **[Ensemble]** Per-POV knowledge states tracked and consistent (no information leaks across POVs)
 - [ ] **Next**: Auto-proceed to Editor audit phase
 ```
 

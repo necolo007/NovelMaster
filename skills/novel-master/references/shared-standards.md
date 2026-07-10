@@ -68,8 +68,11 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 | Banned Pattern | Explanation | Example of Violation |
 |---------------|-------------|---------------------|
 | **Omniscient slip** (上帝视角旁白) | Third-person limited POV must not reveal information the POV character doesn't know | "林星河不知道的是，在城市的另一端，苏晴正在…" |
+| **Head-hopping** (视角跳跃) | Switching POV within a scene without a scene break. Multi-POV novels switch at chapter boundaries or explicit scene breaks only | Paragraph 1: from 林星河's head, Paragraph 2: suddenly in 苏晴's head, same scene |
+| **POV knowledge leak** (视角知识泄露) | In multi-POV novels, a POV character must not know or intuit information they only learned in another character's POV chapter | 冷月婵 in her POV chapter suddenly knowing a secret that was revealed to the reader in 林星河's POV chapter, with no narrative transmission |
 | **Character IQ drop** (角色智商下线) | Characters must not act against their established intelligence/experience for plot convenience | Genius strategist falls for obvious trap with no misdirection |
 | **Power scaling collapse** (战力崩坏) | Power levels established in the world system must remain consistent | B级 defeats SSS级 "through willpower" |
+| **Kinship/name contradiction** (亲属姓名逻辑错误) | Relatives' surnames, aliases, titles, ages, or inheritance status conflict without in-story explanation | Father is named 剑无极 and daughter 冷月婵, but no profile/prose explains that 剑无极 is a title or alias |
 | **Exposition dump** (设定说明文) | World-building info must be woven into action/dialogue, not delivered as lecture paragraphs | 500+ character block of pure world history |
 | **Coincidence abuse** (巧合过多) | Plot resolution through coincidence rather than character agency | Protagonist "happens to be passing by" for the 5th critical moment |
 | **Emotion telling** (情感直白) | Stating emotions instead of showing them through action/physiology | "他很愤怒" instead of "他的拳头攥紧了" |
@@ -87,6 +90,8 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 | **Ornamental metaphor chain** | Multiple abstract metaphors explain the same feeling without new action or decision | "那句话像针，又像旧伤，又像火星…" after the scene already shows pressure |
 | **AI-literary cadence** | Repeated paragraph shapes used to sound profound rather than natural | "它不像X。X会Y。可它像Z。" / "不是A。是B。" repeated as decoration |
 | **Empty fragment stacking** | Several single-sentence or single-word paragraphs that do not create rhythm, tension, or emphasis | "很轻。很冷。很疼。不是疼。" |
+| **Undifferentiated POV voice** (群像声音雷同) | In multi-POV novels, different POV characters' narration reads with the same perception style, vocabulary, and internal concerns | 冷月婵's POV chapter reads like 林星河's with the name swapped |
+| **Cheerleader syndrome** (配角啦啦队化) | Supporting characters in a scene exist only to react to/admire/validate the protagonist, with no independent perspective or action | Every support character's line is a variation of "你说得对" or "太厉害了" |
 
 ---
 
@@ -99,6 +104,39 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 | **Reference copying** | Borrowing ingredient plot, character design, scene order, or recognizable prose instead of craft signals | Same setup/twist/line shape as a reference novel |
 | **Decorative emotional recap** | A paragraph restates what the previous action/dialogue already proved | After a character is publicly humiliated, adding a long explanation that humiliation hurts |
 | **Generic dialogue voice** | Lines can be swapped between characters with no loss of identity | Every character answers in the same clipped "嗯/知道/好/不是" rhythm |
+| **POV-character-as-camera** | A POV chapter where the POV character merely observes events happening to others, with no personal stakes, choices, or emotional arc | 冷月婵's chapter is just her watching 林星河 fight someone |
+| **Group-scene agreement spiral** | In a group scene (3+ characters), everyone takes turns agreeing with or supporting the same character, creating no friction or dynamic | A planning scene where every character says "我同意" in their own words |
+
+---
+
+### 2.4 Ensemble-Specific Quality Standards (群像质量标准)
+
+When the novel uses multi-POV/ensemble cast, the following additional standards apply:
+
+#### 2.4.1 POV Voice Differentiation Standard
+
+Each POV character's narration MUST differ in at least 3 of these 5 dimensions:
+
+| Dimension | How to Differentiate |
+|-----------|---------------------|
+| **Perception priority** | What sensory input does this character notice first? (Visual details / sounds / body language / spatial relationships / emotional atmosphere) |
+| **Vocabulary range** | Formal vs. colloquial, technical jargon from their profession, metaphors drawn from their life experience |
+| **Sentence rhythm** | Short and punchy vs. flowing and layered. Do they think in fragments or complete arguments? |
+| **Value filter** | What do they judge automatically? (Fairness / efficiency / beauty / discipline / loyalty / truth) |
+| **Memory palette** | What kind of memories surface unbidden? (Failures / betrayals / moments of peace / faces of the dead / promises made) |
+
+#### 2.4.2 Screen Time Balance Standard
+
+- Primary POV (protagonist): must NOT exceed 70% of total chapters
+- Each secondary POV character: minimum 3 dedicated chapters per volume
+- No named supporting character should vanish for >15 consecutive chapters without narrative reason
+- Antagonist POV: at least 1 chapter per volume to maintain threat credibility
+
+#### 2.4.3 Supporting Character Arc Standard
+
+- Each supporting character with a POV must have at least 1 belief that is challenged and evolves
+- Their arc must intersect with the main plot at ≥3 points (not run parallel indefinitely)
+- Their independent desire must create friction with the protagonist's goal at least once
 
 ---
 
@@ -158,6 +196,15 @@ Ingredient-derived style guides may influence rhythm, density, dialogue craft, s
 - Prefer concrete verbs and scene movement over abstract commentary.
 - Do not use repeated "不是/是", "不像/像", "可/却" sentence ladders as a default literary effect.
 - A polished paragraph should sound like a confident storyteller, not a caption explaining why the moment matters.
+
+### 3.2.1 Logic & Name Audit
+
+Before finalizing a chapter, verify named characters against the framework and trackers:
+
+- Family members should share the expected surname unless the story explicitly establishes a title, alias, courtesy name, adopted relationship, maternal surname, or other cultural reason.
+- If a character is usually called by title or江湖名号, the real name and title relationship must be recorded in `character_profiles.md`, `spec_lock.md`, and `character_state.json`.
+- Do not repair a name contradiction only in narration. Update the framework/tracker anchor so future chapters inherit the fix.
+- Check ages, ranks, sect positions, injuries, possessions, and relationship status whenever they are mentioned in dialogue or narration.
 
 ### 3.3 Pleasure-Point Engineering (爽点工程)
 
