@@ -287,9 +287,10 @@ def build_style_recommendations(metrics: dict[str, float]) -> list[str]:
         "Before each major decision, add one reader-facing emotional anchor: what the POV character wants, fears, misreads, or refuses to admit.",
         "Use action beats around dialogue so characters feel physically present instead of trading lines in empty space.",
         "Let pleasure points land through cause and reaction: setup the pressure, show the turn, then give one concrete aftershock.",
-        "Dialogue must taste like people: ban telegram scraps (问/出/走/条件); give each major speaker at least one line with bite, heat, humor, or evasion.",
+        "Dialogue must taste like people: ban telegram scraps (问/出/走/条件) and incomplete catalog splits (你主查。我主护。她主听。); give each major speaker at least one line with bite, heat, humor, or evasion.",
         "Prefer verifiable sensory modifiers over abstract stacked adjectives (avoid 香得克制 / 安静得像故意 / 笑意满眼里更满).",
-        "One metaphor per emotional beat; do not chain salt/shell/chess/price/goods abstractions across a whole tea-table scene.",
+        "One metaphor per emotional beat; ban unlike-like ladders (不像A，也不像B。像C) especially in dialogue; do not chain salt/shell/chess/price/goods abstractions across a whole tea-table scene.",
+        "Use em dashes sparingly: interrupted speech only; never as decorative pause or ——不是/像/要 gloss.",
     ]
 
     if metrics.get("dialogue_ratio", 0) < 0.2:
@@ -313,10 +314,12 @@ def build_style_recommendations(metrics: dict[str, float]) -> list[str]:
 def dialogue_flavor_checklist() -> list[str]:
     return [
         "Each important reply carries identity: diction, status, desire, or pressure — not a plot token.",
-        "Terse characters stay short but edged; never collapse into ≤2-character command spam.",
+        "Terse characters stay short but edged; never collapse into ≤2-character command spam or single-verb catalogs.",
+        "Lines must be complete spoken clauses; rewrite 你主查。我主护。她主听。 into natural speech.",
         "Playful/clever characters probe with detours, jokes, and bait; never dump rule sheets.",
         "Interleave speech with cup/sword/sleeve/eye beats so dialogue has body.",
         "At least one line per major scene should make a reader smile, sting, or lean forward.",
+        "Ban dialogue unlike-like ladders (不像A，也不像B。像C) and twin 像A，又像B stacks.",
     ]
 
 

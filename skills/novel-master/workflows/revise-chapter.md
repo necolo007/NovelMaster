@@ -51,6 +51,7 @@ Generate the revised chapter prose following all Writer standards:
 - Same word count target
 - Updated `pleasure_points` and `foreshadowing_*` frontmatter fields
 - Apply the Writer reader-view loop: diagnose target-reader weak points, revise for curiosity/empathy/tension/warmth, then do a final polish pass
+- Final polish must also kill: unlike-like metaphor ladders, incomplete catalog dialogue, decorative em dashes
 - If `ingredient_style_guide.md` exists, use it for rhythm/dialogue/sensory/action craft only; do not borrow source plot, characters, or phrasing
 
 Save to `drafts/chapter_NNN.md` (overwrite).

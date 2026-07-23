@@ -9,6 +9,9 @@ Checks:
   - Long paragraphs that hurt mobile reading rhythm
   - Stiff summary voice patterns
   - AI 纠偏句式「不是A，是B / 不是A。是B / 不像A，是B」（同句与跨段）
+  - 「不像A，也不像B。像C」双否一肯比喻梯（对白尤严）
+  - 残缺对白：分工电报腔「你主查。我主护。她主听。」等单字谓语句串
+  - 破折号「——」过密或装饰性停顿
   - Reader hook at opening and next-click hook at ending
   - Ingredient style guide presence and basic sensory/action craft signal
 """
@@ -112,6 +115,24 @@ _NOT_BUT_CROSS = re.compile(
 _NOT_BUT_TRIPLE = re.compile(
     r"不是[^。！？\n]{1,20}，不是[^。！？\n]{1,20}，(?:而)?是"
 )
+# 「不像A，也不像B。像C」/「不像A，不像B，像C」双否一肯比喻梯
+_UNLIKE_LIKE_LADDER = re.compile(
+    r"不(?:像|是)(?![说吗嘛么啊呀])"
+    r"[^。！？\n「」\"“”『』]{1,24}"
+    r"(?:[，,、；;]|\s*)?"
+    r"(?:也)?不(?:像|是)(?![说吗嘛么啊呀])"
+    r"[^。！？\n「」\"“”『』]{1,24}"
+    r"[。！？，,、；;]?\s*"
+    r"(?:而)?像"
+)
+# 对白内短促「像A，又像B」叠喻（同句双像）
+_DIALOGUE_TWIN_LIKE = re.compile(
+    r"[「“『][^」”』]{0,80}"
+    r"像[^。！？\n「」”』]{1,20}"
+    r"(?:，|、|；|;|——)\s*"
+    r"(?:又|也|还)?像"
+    r"[^」”』]{0,40}[」”』]"
+)
 _AI_CADENCE_OTHER = [
     re.compile(
         r"不(?:是|像)[^。！？\n]{1,30}[。！？]\s*(?:\n\s*){0,2}"
@@ -119,6 +140,34 @@ _AI_CADENCE_OTHER = [
     ),
     re.compile(r"(?:像[^。！？\n]{1,30}[。！？]\s*){3,}"),
 ]
+
+# 分工电报腔：「你主查。我主护。她主听。」/「你查。我护。她听。」
+_ROLE_TELEGRAM = re.compile(
+    r"(?:[你我他她它]|[\u4e00-\u9fff]{1,4})"
+    r"主?[\u4e00-\u9fff]{1,2}[。！？]\s*"
+    r"(?:[你我他她它]|[\u4e00-\u9fff]{1,4})"
+    r"主?[\u4e00-\u9fff]{1,2}[。！？]\s*"
+    r"(?:[你我他她它]|[\u4e00-\u9fff]{1,4})"
+    r"主?[\u4e00-\u9fff]{1,2}[。！？]"
+)
+# 对白内连续 ≥3 个极短完整句（每句 ≤4 字，且含「主X」单字谓或代词+单字谓）
+_SHORT_CLAUSE_CATALOG = re.compile(
+    r"[「“『]("
+    r"(?:[^」”』。！？]{1,4}[。！？]\s*){2}"
+    r"[^」”』。！？]{1,4}[。！？]"
+    r")[^」”』]*[」”』]"
+)
+_SINGLE_VERB_PRED = re.compile(
+    r"(?:^|[。！？\s])(?:[你我他她它]|[\u4e00-\u9fff]{1,3})主[\u4e00-\u9fff]{1,2}(?=[。！？])"
+)
+
+# 破折号：装饰性停顿 / 纠偏插入（允许对话打断）
+_DASH_GLOSS = re.compile(
+    r"——\s*(?:不是|不像|而是|像|要|要的是|说明|等于|其实|分明)"
+)
+_DASH_PAUSE = re.compile(
+    r"[\u4e00-\u9fff」”』]——[\u4e00-\u9fff「“『]"
+)
 
 
 def find_not_but_hits(text: str) -> list[str]:
@@ -134,6 +183,110 @@ def find_not_but_hits(text: str) -> list[str]:
             seen.add(snippet)
             hits.append(snippet[:60])
     return hits
+
+
+def find_unlike_like_ladder_hits(text: str) -> list[str]:
+    """Locate 不像A，也不像B。像C / dialogue twin-像 stacks."""
+    hits: list[str] = []
+    seen: set[str] = set()
+    for regex in (_UNLIKE_LIKE_LADDER, _DIALOGUE_TWIN_LIKE):
+        for match in regex.finditer(text):
+            snippet = re.sub(r"\s+", "", match.group(0))
+            if len(snippet) < 6 or snippet in seen:
+                continue
+            seen.add(snippet)
+            hits.append(snippet[:72])
+    return hits
+
+
+def _is_dialogue_interrupt_dash(text: str, pos: int) -> bool:
+    """Allow —— when it truncates speech inside quotes."""
+    before = text[max(0, pos - 40) : pos]
+    after = text[pos : min(len(text), pos + 12)]
+    open_quote = max(before.rfind(q) for q in "「“『")
+    close_quote = max(before.rfind(q) for q in "」”』")
+    in_dialogue = open_quote > close_quote
+    if not in_dialogue:
+        return False
+    # 「你怎么——」/「若是真的——」类未说完
+    return bool(re.search(r"[？?！!…]?\s*$", before)) or after.lstrip().startswith(("」", "”", "』", "\n"))
+
+
+def em_dash_findings(text: str) -> tuple[list[str], list[str]]:
+    """Flag mysterious / decorative em-dash overuse."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    positions = [m.start() for m in re.finditer(r"——", text)]
+    total = len(positions)
+    if total == 0:
+        return errors, warnings
+
+    interrupt_ok = sum(1 for p in positions if _is_dialogue_interrupt_dash(text, p))
+    decorative = total - interrupt_ok
+    gloss_hits = [re.sub(r"\s+", "", m.group(0))[:40] for m in _DASH_GLOSS.finditer(text)]
+    pause_hits = len(_DASH_PAUSE.findall(text))
+    chars = max(count_text_chars(text), 1)
+    per_1k = decorative / chars * 1000
+
+    if gloss_hits:
+        errors.append(
+            f"破折号纠偏/解释腔：命中 {len(gloss_hits)} 处（禁止「——不是/像/要…」）；例：{'；'.join(gloss_hits[:2])}"
+        )
+    if decorative >= 10 or (decorative >= 6 and per_1k >= 2.5):
+        errors.append(
+            f"破折号过密：装饰性「——」{decorative} 处（对话打断除外；上限 5）；密度 {per_1k:.1f}/1k"
+        )
+    elif decorative >= 5 or pause_hits >= 5:
+        warnings.append(
+            f"破折号偏多：装饰性「——」{decorative} 处 / 句中停顿 {pause_hits} 处（建议改逗号/句号或重写）"
+        )
+    return errors, warnings
+
+
+def incomplete_sentence_findings(text: str) -> tuple[list[str], list[str]]:
+    """Flag telegram role-split / single-verb catalog dialogue."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    role_hits = [
+        re.sub(r"\s+", "", m.group(0))[:48] for m in _ROLE_TELEGRAM.finditer(text)
+    ]
+    # 只保留：含「主X」分工，或三连「代词+单字谓」
+    role_hits = [
+        h
+        for h in role_hits
+        if "主" in h
+        or re.fullmatch(r"(?:[你我他她它][\u4e00-\u9fff][。！？]){3}", h)
+    ]
+    single_verb = [
+        re.sub(r"\s+", "", m.group(0))[:24] for m in _SINGLE_VERB_PRED.finditer(text)
+    ]
+
+    catalog_samples: list[str] = []
+    for m in _SHORT_CLAUSE_CATALOG.finditer(text):
+        inner = m.group(1)
+        clauses = [c for c in re.split(r"[。！？]", inner) if c.strip()]
+        if len(clauses) < 3:
+            continue
+        # 分工/目录腔：多数子句 ≤4 字且含「主」或代词起句
+        shortish = sum(1 for c in clauses if count_text_chars(c) <= 4)
+        roleish = sum(1 for c in clauses if "主" in c or re.match(r"^[你我他她它]", c.strip()))
+        if shortish >= 3 and roleish >= 2:
+            catalog_samples.append(re.sub(r"\s+", "", inner)[:48])
+
+    if role_hits or (len(single_verb) >= 2 and catalog_samples):
+        sample = "；".join((role_hits or catalog_samples or single_verb)[:2])
+        errors.append(
+            f"残缺对白/分工电报腔：句子须写完整，禁止「你主查。我主护。她主听。」类单字谓目录；例：{sample}"
+        )
+    elif catalog_samples:
+        warnings.append(
+            f"对白目录腔：连续极短完整句像在列清单；例：{'；'.join(catalog_samples[:2])}"
+        )
+    elif len(single_verb) >= 3:
+        warnings.append(
+            f"单字谓语偏多（主X）：{len(single_verb)} 处；例：{'；'.join(single_verb[:3])}"
+        )
+    return errors, warnings
 
 
 def naturalness_findings(text: str) -> tuple[list[str], list[str]]:
@@ -166,9 +319,35 @@ def naturalness_findings(text: str) -> tuple[list[str], list[str]]:
             f"AI 纠偏句式偏多：本章「不是/不像…是…」命中 {not_but_count} 处（建议 ≤1）；例：{samples}"
         )
 
+    unlike_hits = find_unlike_like_ladder_hits(text)
+    if unlike_hits:
+        quoted_ladders: list[str] = []
+        for m in re.finditer(r"[「“『]([^」”』]+)[」”』]", text):
+            quoted_ladders.extend(find_unlike_like_ladder_hits(m.group(1)))
+        if quoted_ladders:
+            errors.append(
+                f"对白不自然比喻梯：禁止「不像A，也不像B。像C」/对白双像；例：{'；'.join(quoted_ladders[:2])}"
+            )
+        elif len(unlike_hits) >= 2:
+            errors.append(
+                f"双否一肯比喻梯过密：命中 {len(unlike_hits)} 处（叙述最多 1）；例：{'；'.join(unlike_hits[:2])}"
+            )
+        else:
+            warnings.append(
+                f"双否一肯比喻梯：命中 1 处（优先改成直接判断）；例：{unlike_hits[0]}"
+            )
+
     other_cadence = sum(len(rx.findall(text)) for rx in _AI_CADENCE_OTHER)
     if other_cadence >= 3:
         warnings.append(f"repeated AI-literary cadence ({other_cadence} pattern hits)")
+
+    inc_err, inc_warn = incomplete_sentence_findings(text)
+    errors.extend(inc_err)
+    warnings.extend(inc_warn)
+
+    dash_err, dash_warn = em_dash_findings(text)
+    errors.extend(dash_err)
+    warnings.extend(dash_warn)
 
     non_dialogue = re.sub(r"[「“『].*?[」”』]", "", text, flags=re.S)
     metaphor_hits = len(re.findall(r"(?:像|仿佛|好似|犹如)", non_dialogue))

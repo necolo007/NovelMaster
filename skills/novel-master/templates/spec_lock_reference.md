@@ -47,14 +47,15 @@ style:
   reader_lens:
     target_readers: ["{reader_profile_1}", "{reader_profile_2}"]
     emotional_pull: ["curiosity", "empathy", "tension", "warmth", "next_click"]
-    avoid_voice: ["stiff_summary", "overly_archaic", "plot_report", "ai_literary_cadence", "ornamental_metaphor_chain", "generic_dialogue"]
+    avoid_voice: ["stiff_summary", "overly_archaic", "plot_report", "ai_literary_cadence", "ornamental_metaphor_chain", "unlike_like_ladder", "incomplete_catalog_dialogue", "decorative_em_dash", "generic_dialogue"]
   prose_naturalness:
-    priority: "精练自然 > 刻意文艺"
-    sentence_rule: "每个描写句必须推进动作、压力、人物选择、伏笔、幽默或关系变化；只解释氛围的句子删除"
-    metaphor_rule: "同一情绪/压力点最多保留一个具体比喻，不连续堆叠抽象意象"
-    cadence_rule: "禁止把「不是X。是Y。」「不是X，是Y」「不是X——是Y」「不像X。X会Y。可它像Z。」当作默认句式；同章合计最多 1 处，且仅当角色认知当场翻转；优先改成直接动作/判断"
+    priority: "有味自然 > 干涩精练 > 刻意文艺"
+    sentence_rule: "每个描写句必须推进动作、压力、人物选择、伏笔、幽默或关系变化；只解释氛围的句子删除；对白必须完整可上口，禁止单字谓目录腔"
+    metaphor_rule: "同一情绪/压力点最多保留一个具体比喻，不连续堆叠抽象意象；禁止「不像A，也不像B。像C」及对白「像A，又像B」"
+    cadence_rule: "禁止把「不是X。是Y。」「不是X，是Y」「不是X——是Y」「不像X，也不像Y。像Z。」当作默认句式；同章合计最多 1 处，且仅当角色认知当场翻转；优先改成直接动作/判断"
     paragraph_rule: "短段落服务节奏；连续单句抽象段超过3段必须合并或改成动作/对白"
-    cleanup_pass: "终稿前删除无意义心理解释、重复情绪转述和只为显得有文采的句子"
+    dash_rule: "破折号默认少用：仅对话打断/话说一半，或极少数同位说明；禁止「——不是/像/要」纠偏与装饰性停顿；装饰性——同章建议≤4"
+    cleanup_pass: "终稿前删除无意义心理解释、重复情绪转述、不自然比喻梯、装饰破折号和只为显得有文采的句子；补全残缺对白"
   revision_loop:
     draft_pass: true
     reader_view_pass: true
@@ -76,6 +77,9 @@ style:
     - "no_coincidence_abuse"
     - "no_emotion_telling"
     - "no_not_but_gloss_ladder"  # 不是A，是B / 不是A。是B — max 1/chapter
+    - "no_unlike_like_ladder"  # 不像A，也不像B。像C — banned in dialogue
+    - "no_incomplete_catalog_dialogue"  # 你主查。我主护。她主听。
+    - "no_decorative_em_dash"  # —— 仅打断；禁纠偏/装饰停顿
 ```
 
 ---

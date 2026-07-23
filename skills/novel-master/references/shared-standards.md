@@ -88,8 +88,11 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 | **Floating dialogue** | Extended dialogue exchanges with no attribution, action, or setting | 10+ lines of pure dialogue with no beats |
 | **Redundant inner monologue** | Protagonist narrates what the reader already saw happen | "刚才那一剑，他用的是家传剑法的第三式——" (reader just read the fight) |
 | **Ornamental metaphor chain** | Multiple abstract metaphors explain the same feeling without new action or decision | "那句话像针，又像旧伤，又像火星…" after the scene already shows pressure |
+| **Unlike-like ladder** (双否一肯比喻梯) | 用「不像A，也不像B。像C」或对白里「像A，又像B」代替直接判断；对白中尤为假 | 「这股劲……不像血煞，也不像正道。像把路封死的闸。」；**对白禁止**，叙述每章最多 1 处且优先改写 |
 | **AI-literary cadence** | Repeated paragraph shapes used to sound profound rather than natural | "它不像X。X会Y。可它像Z。" / "不是A。是B。" / **同句**「不是A，是B」「不是A——是B」反复当解释器用 |
 | **Empty fragment stacking** | Several single-sentence or single-word paragraphs that do not create rhythm, tension, or emphasis | "很轻。很冷。很疼。不是疼。" |
+| **Incomplete catalog dialogue** (残缺对白/分工电报) | 对白用单字谓、目录式短句切分工，句子不完整 | 「你主查。我主护。她主听。」→ 应写成完整口语句 |
+| **Decorative em dash** (装饰破折号) | 用「——」制造文艺停顿、纠偏解释，或替代逗号/句号；同章装饰性破折号过密 | 「钉尖对准丹田——不是刺心，是封种」；「他忽然很清楚一件事——自己怕的是…」 |
 | **Not-but gloss ladder** (纠偏句式) | 先否后肯的标签式讲解：用「不是/不像…是/而是…」替读者下结论，而不是直接写动作、感官或判断 | 「钉尖对准丹田——不是刺心，是封种」「点头不是拜，是认」；**每章最多 1 处**，且仅当角色认知当场翻转时可用 |
 | **Undifferentiated POV voice** (群像声音雷同) | In multi-POV novels, different POV characters' narration reads with the same perception style, vocabulary, and internal concerns | 冷月婵's POV chapter reads like 林星河's with the name swapped |
 | **Cheerleader syndrome** (配角啦啦队化) | Supporting characters in a scene exist only to react to/admire/validate the protagonist, with no independent perspective or action | Every support character's line is a variation of "你说得对" or "太厉害了" |
@@ -193,6 +196,7 @@ Ingredient-derived style guides may influence rhythm, density, dialogue craft, s
 
 **对白有味硬规则（防电报腔 / 防干涩）**：
 - **短 ≠ 瘪**：「冷冽」「简洁」指句子有刃、有身份、有潜台词，不是把人写成只会回「嗯 / 问 / 出 / 走 / 条件」。
+- **句子要完整**：对白禁止目录式单字谓分工。「你主查。我主护。她主听。」必须改成能上口的完整句（例：「你查。我护着。她听风。」仍偏电报 → 「你主查脚印，我护侧翼，她听铃。」或更自然的口语句）。单字谓语「主X」连续出现视为失败。
 - **电报腔上限**：单章内 ≤2 字的对白（如「问。」「出。」「走。」「越界。」）合计不超过对白条数的 **15%**；超过必须扩写成带身份信息的短句，或并入动作节拍。
 - **每场关键对谈 ≥1 句带刺/带热/带笑**：机锋、护短、嘲讽、心虚掩饰、故意偏题均可——纯情报交换式对白视为失败。
 - **角色口吻要「听得出是谁」**：冷角色可以短，但短句里仍要有判断与压力（例：✗「越界。」→ ✓「你问到这儿，就别装做客。」）；俏皮角色要有绕弯与试探，不能只丢规则说明书。
@@ -212,6 +216,12 @@ Ingredient-derived style guides may influence rhythm, density, dialogue craft, s
 - Prefer concrete verbs and scene movement over abstract commentary.
 - Do not use repeated "不是/是", "不像/像", "可/却" sentence ladders as a default literary effect.
 - **纠偏句式硬限制**：同句「不是A，是B / 不是A——是B / 不是A，而是B」与跨句「不是A。是B。」合并计数；**每章默认 ≤1 处**。超过即视为质量失败，须改写后再过稿。
+- **双否一肯比喻梯硬限制**：禁止「不像A，也不像B。像C」及对白内「像A，又像B」叠喻。对白中出现即失败；叙述每章最多 1 处，优先改成直接判断或单一具体喻体。
+  - ✗「这股劲……不像血煞，也不像正道。像把路封死的闸。」 → ✓「这股劲邪门，像闸门把路封死。」 / 「这股劲不是血煞，也不是正道剑气——」仍用破折号也不如：✓「这股劲邪门，路都被封死了。」
+  - ✗「像生怕被落下，又像生怕他们并坐太熟。」 → ✓「她挤到中间，生怕被落下。」
+- **破折号硬限制**：「——」默认少用。仅允许：(1) 对白被打断/话说一半；(2) 极少数不得不插入的同位说明。禁止用「——」制造文艺停顿、纠偏解释（「——不是/像/要…」），也禁止拿它代替逗号或句号。装饰性破折号同章建议 ≤4，超过须改写。
+  - ✗「他忽然很清楚一件事——自己怕的是被活着拿走。」 → ✓「他忽然很清楚：自己怕的是被活着拿走。」
+  - ✗「钉尖对准丹田——不是刺心，是封种。」 → ✓「钉尖对准丹田，要封种。」
 - **改写优先直接陈述**：删掉「不是…」半句，只保留真实动作/判断；或改成感官/后果描写。
   - ✗「脚步不是慌乱。是故意的试探。」 → ✓「脚步轻得不像慌，倒像故意试探。」 / 「有人在附近丢石子试探。」
   - ✗「钉尖对准丹田——不是刺心，是封种。」 → ✓「钉尖对准丹田，要封种。」

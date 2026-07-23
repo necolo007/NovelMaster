@@ -261,12 +261,15 @@ Before saving a chapter, perform a sentence-level cleanup pass:
 
 1. **Cut or merge filler**: if a paragraph only explains a sentence before it, delete it or fold the useful phrase into nearby action.
 2. **One image per beat**: use one concrete image for a feeling, then move on. Do not stack needle/knife/fire/bone-style metaphors for the same emotion. Also do not chain business/abstract metaphors (`盐/壳/棋/差价/货/账`) across one scene.
-3. **Prefer cause over ornament**: a sentence should advance action, reveal character, sharpen tension, land humor, or plant/pay off information. If it only sounds "literary", cut it.
-4. **Smooth broken cadence**: short paragraphs are allowed, but several single-line abstractions in a row must be merged or replaced with action/dialogue.
-5. **Voice-check dialogue**: every named character's lines must match their profile. 宇文渊 measured with dry humor; 铁无双 direct and loud; 老墨 sardonic with intel; 老酒鬼 drunk-mouthed but sharp; 冷月婵 terse **with edge**, not telegram scraps; 苏玲珑 playful and probing, never a rule pamphlet. If names can be swapped without changing the line, rewrite it.
-6. **Dialogue must do work AND have flavor**: each exchange should change status, reveal intent, create pressure, or land personality. Ban dry Q&A that only moves plot tokens. Expand ≤2-character replies unless silence itself is the weapon.
-7. **Kill weird modifiers**: rewrite abstract stacked adjectives (`香得克制` / `笑意满，眼里更满` / `安静得像故意`) into verifiable sensory or bodily detail.
-8. **Ingredient assimilation check**: if `ingredient_style_guide.md` exists, confirm the chapter borrowed at least 2 craft moves from it (dialogue pulse with action beats, sensory texture, emotional warmth through behavior). Metrics-only obedience without flavor is failure.
+3. **Kill unlike-like ladders**: ban dialogue「不像A，也不像B。像C」and twin「像A，又像B」. Prefer one direct judgment or one concrete image.
+4. **Complete sentences in dialogue**: ban catalog role-splits with single-character predicates（「你主查。我主护。她主听。」）. Cold characters may be terse, but lines must still be speakable full clauses.
+5. **Dash diet**: default to comma/period/colon. Keep「——」only for interrupted speech or rare apposition. Delete decorative mid-sentence dashes and any「——不是/像/要…」gloss.
+6. **Prefer cause over ornament**: a sentence should advance action, reveal character, sharpen tension, land humor, or plant/pay off information. If it only sounds "literary", cut it.
+7. **Smooth broken cadence**: short paragraphs are allowed, but several single-line abstractions in a row must be merged or replaced with action/dialogue.
+8. **Voice-check dialogue**: every named character's lines must match their profile. 宇文渊 measured with dry humor; 铁无双 direct and loud; 老墨 sardonic with intel; 老酒鬼 drunk-mouthed but sharp; 冷月婵 terse **with edge**, not telegram scraps; 苏玲珑 playful and probing, never a rule pamphlet. If names can be swapped without changing the line, rewrite it.
+9. **Dialogue must do work AND have flavor**: each exchange should change status, reveal intent, create pressure, or land personality. Ban dry Q&A that only moves plot tokens. Expand ≤2-character replies unless silence itself is the weapon.
+10. **Kill weird modifiers**: rewrite abstract stacked adjectives (`香得克制` / `笑意满，眼里更满` / `安静得像故意`) into verifiable sensory or bodily detail.
+11. **Ingredient assimilation check**: if `ingredient_style_guide.md` exists, confirm the chapter borrowed at least 2 craft moves from it (dialogue pulse with action beats, sensory texture, emotional warmth through behavior). Metrics-only obedience without flavor is failure.
 
 ### 3.1 Chapter Structure (网文通用结构)
 
