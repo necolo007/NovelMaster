@@ -287,6 +287,9 @@ def build_style_recommendations(metrics: dict[str, float]) -> list[str]:
         "Before each major decision, add one reader-facing emotional anchor: what the POV character wants, fears, misreads, or refuses to admit.",
         "Use action beats around dialogue so characters feel physically present instead of trading lines in empty space.",
         "Let pleasure points land through cause and reaction: setup the pressure, show the turn, then give one concrete aftershock.",
+        "Dialogue must taste like people: ban telegram scraps (问/出/走/条件); give each major speaker at least one line with bite, heat, humor, or evasion.",
+        "Prefer verifiable sensory modifiers over abstract stacked adjectives (avoid 香得克制 / 安静得像故意 / 笑意满眼里更满).",
+        "One metaphor per emotional beat; do not chain salt/shell/chess/price/goods abstractions across a whole tea-table scene.",
     ]
 
     if metrics.get("dialogue_ratio", 0) < 0.2:
@@ -306,6 +309,24 @@ def build_style_recommendations(metrics: dict[str, float]) -> list[str]:
 
     return recommendations
 
+
+def dialogue_flavor_checklist() -> list[str]:
+    return [
+        "Each important reply carries identity: diction, status, desire, or pressure — not a plot token.",
+        "Terse characters stay short but edged; never collapse into ≤2-character command spam.",
+        "Playful/clever characters probe with detours, jokes, and bait; never dump rule sheets.",
+        "Interleave speech with cup/sword/sleeve/eye beats so dialogue has body.",
+        "At least one line per major scene should make a reader smile, sting, or lean forward.",
+    ]
+
+
+def adjective_discipline_checklist() -> list[str]:
+    return [
+        "Replace abstract intensity labels with source + sensation (where the smell comes from, what the hand does).",
+        "If deleting a modifier does not change plot or relationship, delete it.",
+        "Avoid twin abstract stacks in one sentence (满/更满, 真/净, 克制/故意 as atmosphere stickers).",
+        "Keep genre heat through concrete weather, sweat, salt, frost, blood, tea steam — not caption adjectives.",
+    ]
 
 def write_markdown(project_path: Path, sources: list[dict[str, object]], output_path: Path, ingredient_dirs: list[Path]) -> None:
     metrics = aggregate_metrics(sources)
@@ -350,6 +371,24 @@ def write_markdown(project_path: Path, sources: list[dict[str, object]], output_
     lines.extend(
         [
             "",
+            "## Dialogue Flavor Checklist",
+            "",
+        ]
+    )
+    lines.extend(f"- {item}" for item in dialogue_flavor_checklist())
+
+    lines.extend(
+        [
+            "",
+            "## Adjective Discipline Checklist",
+            "",
+        ]
+    )
+    lines.extend(f"- {item}" for item in adjective_discipline_checklist())
+
+    lines.extend(
+        [
+            "",
             "## Reader-View Polish Checklist",
             "",
             "- Curiosity: the opening paragraph gives the reader a concrete question or discomfort.",
@@ -357,6 +396,8 @@ def write_markdown(project_path: Path, sources: list[dict[str, object]], output_
             "- Heat: every argument, fight, or reward changes status, intimacy, safety, or self-image.",
             "- Texture: at least one non-visual detail grounds the location.",
             "- Freshness: replace formal summary with a gesture, a line of subtext, or an observed contradiction.",
+            "- Mouthfeel: dialogue sounds spoken by distinct people, not a dry briefing.",
+            "- Modifier sanity: no weird abstract adjective stacks.",
             "- Next-click: the ending leaves an unresolved promise, cost, discovery, or decision.",
             "",
             "## Per-Source Notes",

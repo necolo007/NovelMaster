@@ -88,8 +88,9 @@ The following patterns are FORBIDDEN in generated chapters. These rules have the
 | **Floating dialogue** | Extended dialogue exchanges with no attribution, action, or setting | 10+ lines of pure dialogue with no beats |
 | **Redundant inner monologue** | Protagonist narrates what the reader already saw happen | "刚才那一剑，他用的是家传剑法的第三式——" (reader just read the fight) |
 | **Ornamental metaphor chain** | Multiple abstract metaphors explain the same feeling without new action or decision | "那句话像针，又像旧伤，又像火星…" after the scene already shows pressure |
-| **AI-literary cadence** | Repeated paragraph shapes used to sound profound rather than natural | "它不像X。X会Y。可它像Z。" / "不是A。是B。" repeated as decoration |
+| **AI-literary cadence** | Repeated paragraph shapes used to sound profound rather than natural | "它不像X。X会Y。可它像Z。" / "不是A。是B。" / **同句**「不是A，是B」「不是A——是B」反复当解释器用 |
 | **Empty fragment stacking** | Several single-sentence or single-word paragraphs that do not create rhythm, tension, or emphasis | "很轻。很冷。很疼。不是疼。" |
+| **Not-but gloss ladder** (纠偏句式) | 先否后肯的标签式讲解：用「不是/不像…是/而是…」替读者下结论，而不是直接写动作、感官或判断 | 「钉尖对准丹田——不是刺心，是封种」「点头不是拜，是认」；**每章最多 1 处**，且仅当角色认知当场翻转时可用 |
 | **Undifferentiated POV voice** (群像声音雷同) | In multi-POV novels, different POV characters' narration reads with the same perception style, vocabulary, and internal concerns | 冷月婵's POV chapter reads like 林星河's with the name swapped |
 | **Cheerleader syndrome** (配角啦啦队化) | Supporting characters in a scene exist only to react to/admire/validate the protagonist, with no independent perspective or action | Every support character's line is a variation of "你说得对" or "太厉害了" |
 
@@ -190,11 +191,31 @@ Ingredient-derived style guides may influence rhythm, density, dialogue craft, s
 - One-word replies are allowed only when the silence is the point. Otherwise replace them with a characterful line or an action beat.
 - If a line can be spoken by another character without changing wording, rewrite it using that character's diction, status, and current desire.
 
+**对白有味硬规则（防电报腔 / 防干涩）**：
+- **短 ≠ 瘪**：「冷冽」「简洁」指句子有刃、有身份、有潜台词，不是把人写成只会回「嗯 / 问 / 出 / 走 / 条件」。
+- **电报腔上限**：单章内 ≤2 字的对白（如「问。」「出。」「走。」「越界。」）合计不超过对白条数的 **15%**；超过必须扩写成带身份信息的短句，或并入动作节拍。
+- **每场关键对谈 ≥1 句带刺/带热/带笑**：机锋、护短、嘲讽、心虚掩饰、故意偏题均可——纯情报交换式对白视为失败。
+- **角色口吻要「听得出是谁」**：冷角色可以短，但短句里仍要有判断与压力（例：✗「越界。」→ ✓「你问到这儿，就别装做客。」）；俏皮角色要有绕弯与试探，不能只丢规则说明书。
+- **素材同款呼吸**：有 `ingredient_style_guide.md` 时，对白优先学其「有来有回、夹动作、夹气味/触感」的写法，禁止只保留剧情要点的提纲腔。
+
+**形容词 / 修饰怪味禁令**：
+- 禁止「抽象副词 + 抽象形容词」叠味：如「香得克制」「笑意满，眼里更满」「安静得像故意」「茶香真，水汽净」——读起来像在给气氛贴标签，不像人在场。
+- 优先改成**可感可验**的细节：温度、触感、气味来源、肢体小动作、器物反应。
+  - ✗「茶香得克制」→ ✓「茶香淡，刚揭盖那一下才闻得清」
+  - ✗「腕铃安静，安静得像故意」→ ✓「腕铃被她用指腹按住，一响也无」
+- 禁止概念隐喻连射：同一场戏里不要连续用「盐 / 壳 / 棋 / 差价 / 货 / 账」互译人际关系；一场保留 **一个** 主隐喻即可，其余改成直接利害与动作。
+- 形容词服务判断，不服务「文艺感」：若删掉该修饰句，情节与人物关系不变，则删。
+
 **Prose naturalness requirements**:
 - Keep only one strong image per emotional beat.
 - Cut paragraphs that merely explain a metaphor or repeat an already clear feeling.
 - Prefer concrete verbs and scene movement over abstract commentary.
 - Do not use repeated "不是/是", "不像/像", "可/却" sentence ladders as a default literary effect.
+- **纠偏句式硬限制**：同句「不是A，是B / 不是A——是B / 不是A，而是B」与跨句「不是A。是B。」合并计数；**每章默认 ≤1 处**。超过即视为质量失败，须改写后再过稿。
+- **改写优先直接陈述**：删掉「不是…」半句，只保留真实动作/判断；或改成感官/后果描写。
+  - ✗「脚步不是慌乱。是故意的试探。」 → ✓「脚步轻得不像慌，倒像故意试探。」 / 「有人在附近丢石子试探。」
+  - ✗「钉尖对准丹田——不是刺心，是封种。」 → ✓「钉尖对准丹田，要封种。」
+  - ✗「点头不是拜，是认。」 → ✓「那一点头，等于认：从此同路。」
 - A polished paragraph should sound like a confident storyteller, not a caption explaining why the moment matters.
 
 ### 3.2.1 Logic & Name Audit

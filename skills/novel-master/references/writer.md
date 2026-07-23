@@ -184,7 +184,8 @@ FOR chapter N:
     □ Dialogue ratio approximately on target
     □ Dialogue voice is character-specific; no generic, broken, or empty back-and-forth
     □ No ornamental filler paragraphs that only restate a feeling already shown
-    □ No repeated rhetorical cadence such as "不是X。是Y。" / "它不像X。X..." used as decoration
+    □ No「不是X，是Y / 不是X。是Y / 不是X——是Y」纠偏句式当作默认文采（每章 ≤1；优先改成直接动作/判断）
+    □ No repeated rhetorical cadence such as "它不像X。X..." used as decoration
     □ Kinship/name logic holds: relatives' surnames, aliases, titles, ages, ranks, and inheritance status match the framework or are explicitly explained
     □ Ending has hook/cliffhanger
     □ No contradiction with spec_lock constraints
@@ -259,11 +260,13 @@ Avoid:
 Before saving a chapter, perform a sentence-level cleanup pass:
 
 1. **Cut or merge filler**: if a paragraph only explains a sentence before it, delete it or fold the useful phrase into nearby action.
-2. **One image per beat**: use one concrete image for a feeling, then move on. Do not stack needle/knife/fire/bone-style metaphors for the same emotion.
+2. **One image per beat**: use one concrete image for a feeling, then move on. Do not stack needle/knife/fire/bone-style metaphors for the same emotion. Also do not chain business/abstract metaphors (`盐/壳/棋/差价/货/账`) across one scene.
 3. **Prefer cause over ornament**: a sentence should advance action, reveal character, sharpen tension, land humor, or plant/pay off information. If it only sounds "literary", cut it.
 4. **Smooth broken cadence**: short paragraphs are allowed, but several single-line abstractions in a row must be merged or replaced with action/dialogue.
-5. **Voice-check dialogue**: every named character's lines must match their profile.宇文渊 speaks measured and dry, 铁无双 direct and loud, 老墨 sardonic, 老酒鬼 drunk-mouthed but sharp, 冷月婵 terse and cold. If names can be swapped without changing the line, rewrite it.
-6. **Dialogue must do work**: each exchange should change status, reveal intent, create pressure, or land personality. Remove filler confirmations like repeated "嗯", "知道", "好" unless they carry subtext.
+5. **Voice-check dialogue**: every named character's lines must match their profile. 宇文渊 measured with dry humor; 铁无双 direct and loud; 老墨 sardonic with intel; 老酒鬼 drunk-mouthed but sharp; 冷月婵 terse **with edge**, not telegram scraps; 苏玲珑 playful and probing, never a rule pamphlet. If names can be swapped without changing the line, rewrite it.
+6. **Dialogue must do work AND have flavor**: each exchange should change status, reveal intent, create pressure, or land personality. Ban dry Q&A that only moves plot tokens. Expand ≤2-character replies unless silence itself is the weapon.
+7. **Kill weird modifiers**: rewrite abstract stacked adjectives (`香得克制` / `笑意满，眼里更满` / `安静得像故意`) into verifiable sensory or bodily detail.
+8. **Ingredient assimilation check**: if `ingredient_style_guide.md` exists, confirm the chapter borrowed at least 2 craft moves from it (dialogue pulse with action beats, sensory texture, emotional warmth through behavior). Metrics-only obedience without flavor is failure.
 
 ### 3.1 Chapter Structure (网文通用结构)
 

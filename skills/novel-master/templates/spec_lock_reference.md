@@ -47,7 +47,14 @@ style:
   reader_lens:
     target_readers: ["{reader_profile_1}", "{reader_profile_2}"]
     emotional_pull: ["curiosity", "empathy", "tension", "warmth", "next_click"]
-    avoid_voice: ["stiff_summary", "overly_archaic", "plot_report"]
+    avoid_voice: ["stiff_summary", "overly_archaic", "plot_report", "ai_literary_cadence", "ornamental_metaphor_chain", "generic_dialogue"]
+  prose_naturalness:
+    priority: "精练自然 > 刻意文艺"
+    sentence_rule: "每个描写句必须推进动作、压力、人物选择、伏笔、幽默或关系变化；只解释氛围的句子删除"
+    metaphor_rule: "同一情绪/压力点最多保留一个具体比喻，不连续堆叠抽象意象"
+    cadence_rule: "禁止把「不是X。是Y。」「不是X，是Y」「不是X——是Y」「不像X。X会Y。可它像Z。」当作默认句式；同章合计最多 1 处，且仅当角色认知当场翻转；优先改成直接动作/判断"
+    paragraph_rule: "短段落服务节奏；连续单句抽象段超过3段必须合并或改成动作/对白"
+    cleanup_pass: "终稿前删除无意义心理解释、重复情绪转述和只为显得有文采的句子"
   revision_loop:
     draft_pass: true
     reader_view_pass: true
@@ -68,6 +75,7 @@ style:
     - "no_exposition_dump"
     - "no_coincidence_abuse"
     - "no_emotion_telling"
+    - "no_not_but_gloss_ladder"  # 不是A，是B / 不是A。是B — max 1/chapter
 ```
 
 ---

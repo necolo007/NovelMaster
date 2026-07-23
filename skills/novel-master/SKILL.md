@@ -370,9 +370,9 @@ FOR each chapter (from chapter_breakdown.md in order):
   3. Look up character_profiles.md and character_state.json for appearing characters
   4. Draft pass: generate complete chapter prose
   5. Reader-view pass: simulate 2-3 target readers and note where curiosity, empathy, desire, humor, tension, or emotional warmth feels weak
-  6. Style-assimilation pass: revise using ingredient_style_guide craft targets (rhythm, dialogue, sensory/action detail, chapter hook) without copying any source wording
-  7. Final polish pass: remove stiff/formal summary narration, cut decorative filler, make dialogue character-specific, tighten paragraphs for mobile reading, then save final prose to drafts/chapter_NNN.md
-  8. Self-review (word count tolerance, pleasure point, POV, reader warmth, prose naturalness, dialogue voice, safe ingredient usage)
+  6. Style-assimilation pass: revise using ingredient_style_guide craft targets (rhythm, dialogue flavor, sensory/action detail, chapter hook) without copying any source wording; must land ≥2 concrete craft moves, not metric checkboxing
+  7. Final polish pass: remove stiff/formal summary narration, cut decorative filler and weird abstract adjectives, expand telegram dialogue into characterful lines, keep one metaphor per beat, tighten mobile paragraphs, then save final prose to drafts/chapter_NNN.md
+  8. Self-review (word count tolerance, pleasure point, POV, reader warmth, prose naturalness, dialogue flavor ≠ dry Q&A, adjective sanity, safe ingredient usage)
   9. Update context_summary.md, plot_tracker.json, and character_state.json
   10. If chapter number is divisible by memory_archive_interval (default 10), run chapter_memory.py to archive the latest complete batch
   11. Output chapter summary (word count, key events, reader-view fixes, style-guide craft moves, foreshadowing operations, memory archive status)

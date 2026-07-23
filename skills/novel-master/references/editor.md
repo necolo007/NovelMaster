@@ -77,6 +77,7 @@ Script: `style_checker.py`
 | Check | What It Catches | Severity |
 |-------|----------------|----------|
 | **POV violation** | Third-person limited slips into omniscient ("林星河不知道的是，在城市的另一端…") | error |
+| **Not-but gloss ladder** | 「不是A，是B / 不是A。是B / 不是A——是B」纠偏句式：同章 ≥4 处为 error，≥2 处为 warning（`style_checker.py`） | error/warning |
 | **Dialogue ratio** | Measured dialogue-to-narration ratio vs spec_lock target | warning |
 | **Tone consistency** | Dark/horror prose in a novel locked as "轻松日常" | warning |
 | **Exposition dump** | 500+ characters of pure world-building narration without dialogue or action | warning |

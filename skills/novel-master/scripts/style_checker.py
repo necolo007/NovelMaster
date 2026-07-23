@@ -8,6 +8,7 @@ Checks:
   - Dialogue ratio against spec_lock target when available
   - Long paragraphs that hurt mobile reading rhythm
   - Stiff summary voice patterns
+  - AI 纠偏句式「不是A，是B / 不是A。是B / 不像A，是B」（同句与跨段）
   - Reader hook at opening and next-click hook at ending
   - Ingredient style guide presence and basic sensory/action craft signal
 """
@@ -94,11 +95,54 @@ def stiff_summary_hits(text: str) -> list[str]:
     return [pattern for pattern in patterns if text.count(pattern) >= 3]
 
 
-def naturalness_warnings(text: str) -> list[str]:
+# AI 「不是A，是B / 不是A。是B」纠偏句式（同句对比 + 跨句/跨段拆分）
+_NOT_BUT_INLINE = re.compile(
+    r"不(?:是|像)(?![说吗嘛么啊呀])"
+    r"[^。！？\n「」\"“”『』]{0,28}"
+    r"(?:[，,、]|——|–|-)\s*"
+    r"(?:而)?是"
+)
+_NOT_BUT_CROSS = re.compile(
+    r"不(?:是|像)(?![说吗嘛么啊呀])"
+    r"[^。！？\n]{1,36}[。！？]\s*"
+    r"(?:\n\s*){0,3}"
+    r"(?:是|而是)(?![否定非])"
+    r"[^。！？\n]{0,48}[。！？]?"
+)
+_NOT_BUT_TRIPLE = re.compile(
+    r"不是[^。！？\n]{1,20}，不是[^。！？\n]{1,20}，(?:而)?是"
+)
+_AI_CADENCE_OTHER = [
+    re.compile(
+        r"不(?:是|像)[^。！？\n]{1,30}[。！？]\s*(?:\n\s*){0,2}"
+        r"(?:可|却|但)[^。！？\n]{1,45}[。！？]"
+    ),
+    re.compile(r"(?:像[^。！？\n]{1,30}[。！？]\s*){3,}"),
+]
+
+
+def find_not_but_hits(text: str) -> list[str]:
+    """Locate decorative 不是…是… / 不像…是… ladders; return unique snippets."""
+    hits: list[str] = []
+    seen: set[str] = set()
+    for regex in (_NOT_BUT_INLINE, _NOT_BUT_CROSS, _NOT_BUT_TRIPLE):
+        for match in regex.finditer(text):
+            snippet = re.sub(r"\s+", "", match.group(0))
+            if len(snippet) < 4 or snippet in seen:
+                continue
+            # 排除「是不是」「还不是X」后接无关「他/她是」类假阳性已由 CROSS 要求下句以「是/而是」起头处理
+            seen.add(snippet)
+            hits.append(snippet[:60])
+    return hits
+
+
+def naturalness_findings(text: str) -> tuple[list[str], list[str]]:
+    """Return (errors, warnings) for prose naturalness / AI cadence."""
+    errors: list[str] = []
     warnings: list[str] = []
     ps = paragraphs(text)
     if not ps:
-        return warnings
+        return errors, warnings
 
     fragment_paragraphs = [
         p
@@ -110,14 +154,21 @@ def naturalness_warnings(text: str) -> list[str]:
             f"fragment-heavy narration ({len(fragment_paragraphs)} very short non-dialogue paragraphs)"
         )
 
-    ai_cadence_patterns = [
-        r"不(?:是|像)[^。！？\n]{1,30}[。！？]\s*(?:\n\s*){0,2}(?:是|而是|可|却|但)[^。！？\n]{1,45}[。！？]",
-        r"(?:不是[^。！？\n]{1,30}[。！？]\s*){2,}",
-        r"(?:像[^。！？\n]{1,30}[。！？]\s*){3,}",
-    ]
-    cadence_hits = sum(len(re.findall(pattern, text)) for pattern in ai_cadence_patterns)
-    if cadence_hits >= 3:
-        warnings.append(f"repeated AI-literary cadence ({cadence_hits} pattern hits)")
+    not_but_hits = find_not_but_hits(text)
+    not_but_count = len(not_but_hits)
+    samples = "；".join(not_but_hits[:3])
+    if not_but_count >= 4:
+        errors.append(
+            f"AI 纠偏句式过密：本章「不是/不像…是…」命中 {not_but_count} 处（上限 3）；例：{samples}"
+        )
+    elif not_but_count >= 2:
+        warnings.append(
+            f"AI 纠偏句式偏多：本章「不是/不像…是…」命中 {not_but_count} 处（建议 ≤1）；例：{samples}"
+        )
+
+    other_cadence = sum(len(rx.findall(text)) for rx in _AI_CADENCE_OTHER)
+    if other_cadence >= 3:
+        warnings.append(f"repeated AI-literary cadence ({other_cadence} pattern hits)")
 
     non_dialogue = re.sub(r"[「“『].*?[」”』]", "", text, flags=re.S)
     metaphor_hits = len(re.findall(r"(?:像|仿佛|好似|犹如)", non_dialogue))
@@ -138,6 +189,12 @@ def naturalness_warnings(text: str) -> list[str]:
     if recap_hits >= 10:
         warnings.append(f"possible decorative emotional recap ({recap_hits} abstract recap markers)")
 
+    return errors, warnings
+
+
+def naturalness_warnings(text: str) -> list[str]:
+    """Backward-compatible helper: warnings only."""
+    _errors, warnings = naturalness_findings(text)
     return warnings
 
 
@@ -162,11 +219,29 @@ def dialogue_quality_warnings(text: str) -> list[str]:
         "不懂",
         "不用",
         "没事",
+        "问",
+        "出",
+        "走",
+        "坐",
+        "停",
+        "看",
+        "听",
+        "条件",
+        "越界",
+        "收到",
+        "成交",
+        "先问",
     }
     short_empty = [q for q in qs if q in empty_replies or count_text_chars(q) <= 2]
     if len(short_empty) >= 6 and len(short_empty) / len(qs) > 0.22:
         warnings.append(
             f"too many empty/one-word dialogue replies ({len(short_empty)}/{len(qs)})"
+        )
+    # Telegram-dialogue: ≤2-char lines over 15% of all dialogue lines
+    telegram = [q for q in qs if count_text_chars(q) <= 2]
+    if len(qs) >= 8 and len(telegram) / len(qs) > 0.15:
+        warnings.append(
+            f"telegram dialogue ratio too high ({len(telegram)}/{len(qs)} lines ≤2 chars); expand into characterful speech"
         )
 
     ps = paragraphs(text)
@@ -186,6 +261,34 @@ def dialogue_quality_warnings(text: str) -> list[str]:
     if question_answer_pairs >= 5:
         warnings.append(f"repetitive question-answer dialogue ({question_answer_pairs} short replies after questions)")
 
+    # Concept-metaphor pileup in one chapter (business/abstract mutual translation)
+    metaphor_tokens = ["盐", "壳", "棋", "差价", "货门", "账本", "活靶"]
+    metaphor_hits = sum(1 for tok in metaphor_tokens if text.count(tok) >= 2)
+    if metaphor_hits >= 4:
+        warnings.append(
+            "concept-metaphor pileup (salt/shell/chess/price/goods/ledger reused); keep one main metaphor per scene"
+        )
+
+    return warnings
+
+
+def adjective_weirdness_warnings(text: str) -> list[str]:
+    """Flag abstract stacked modifiers that read as AI flavor labels."""
+    warnings: list[str] = []
+    patterns = [
+        r"\w{1,6}得(?:克制|过分|刚好|刚刚好|故意)",
+        r"(?:笑意|寒意|杀意|香气|茶香|铃|光)[^。\n]{0,8}(?:满|更满|净|真)[^。\n]{0,6}(?:满|更满|净|真)",
+        r"安静得像",
+        r"(?:香|冷|热|静|亮)得(?:像|仿佛)(?:故意|克制|小心)",
+    ]
+    hits: list[str] = []
+    for pat in patterns:
+        for m in re.finditer(pat, text):
+            hits.append(m.group(0)[:24])
+    if len(hits) >= 2:
+        warnings.append(
+            f"weird abstract modifiers ({len(hits)}): e.g. {', '.join(hits[:3])}; rewrite to concrete sensory detail"
+        )
     return warnings
 
 
@@ -245,10 +348,16 @@ def cmd_check(project_path_str: str) -> dict:
         if hits:
             warnings.append(f"{chapter.name}: repeated stiff-summary phrases: {', '.join(hits[:5])}")
 
-        for warning in naturalness_warnings(body):
+        nat_errors, nat_warnings = naturalness_findings(body)
+        for err in nat_errors:
+            errors.append(f"{chapter.name}: {err}")
+        for warning in nat_warnings:
             warnings.append(f"{chapter.name}: {warning}")
 
         for warning in dialogue_quality_warnings(body):
+            warnings.append(f"{chapter.name}: {warning}")
+
+        for warning in adjective_weirdness_warnings(body):
             warnings.append(f"{chapter.name}: {warning}")
 
         if not has_reader_hook(body):
